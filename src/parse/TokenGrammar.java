@@ -590,7 +590,7 @@ public class TokenGrammar implements wrangLR.runtime.MessageObject {
     //: `} ::= "}" ws*
 
     //: `|| ::= "||" ws*
-    
+
     //================================================================
     // character patterns -- "helper symbols"
     //================================================================
@@ -619,6 +619,9 @@ public class TokenGrammar implements wrangLR.runtime.MessageObject {
     //whitespace
     //: ws ::= {" " 9} // space or tab
     //: ws ::= eol
+    
+    // Recognize comments as whitespace
+    
     //: ws ::= singleLineComment
     //: ws ::= multiLineComment
     
@@ -650,12 +653,10 @@ public class TokenGrammar implements wrangLR.runtime.MessageObject {
     //===============================================================
     // INTLIT - represents either a '0' or one or more digits in sequence which does
     // not start with '0'
+    //
+    // EXTENSION 3: Recognize Octal Values (Hex not supported)
     //===============================================================
-
-    //: INTLIT ::= # "0" !digit ws* =>
-    public int presentZeroAsInt(int position, Character zero) {
-        return 0;
-    }
+    
 
     //: INTLIT ::= # intLit2 ws* =>
     public int convertToInt(int pos, String s) {
@@ -664,6 +665,40 @@ public class TokenGrammar implements wrangLR.runtime.MessageObject {
         }
         catch (NumberFormatException nfx) {
             error(pos, "Integer literal value "+s+" is out of range.");
+            return 0;
+        }
+    }
+    
+    //======================
+    //Extension 3
+    //======================
+    
+    //: octalDigit ::= {"0".."7"} => pass
+    //: INTLIT ::= # "0" !{"x" "X"} octalDigit** ws* =>
+    public int convertOctalToInt(int position, Character zero, List<Character> remainingDigits) {
+        if (remainingDigits.isEmpty()) {
+            return 0;
+        }
+        String octal = zero + remainingDigits.toString();
+        
+        try {
+            return Integer.decode(octal);
+        } catch (NumberFormatException nfx) {
+            error(position, "Integer literal value " + octal + " is out of range");
+            return 0;
+        }
+    }
+    
+    //: hex ::= {"x" "X"} => pass
+    //: hexVal ::= digit => pass
+    //: hexVal ::= {"a".."f"} => pass
+    //: hexVal ::= {"A".."F"} => pass
+    //: INTLIT ::= # "0" hex hexVal++ ws* =>
+    public int hexToInt(int position, Character zero, Character x, List<Character> remainingDigits) {
+        try {
+            return Integer.parseInt(remainingDigits.toString(), 16);
+        } catch (NumberFormatException nfx) {
+            error(position, "Integer literal value " + zero+x+remainingDigits.toString() + " is out of range");
             return 0;
         }
     }
@@ -697,13 +732,22 @@ public class TokenGrammar implements wrangLR.runtime.MessageObject {
     
     //: multiLineCommentStart ::= "/*"
     //: multiLineCommentEnd ::= "*/"
-    //: commentSymbol ::= multiLineCommentStart
-    //: commentSymbol ::= multiLineCommentEnd
     
-    //: commentContent ::= !commentSymbol printableChar
-    //: commentContent ::= eol
+    //: invalidCommentContent ::= multiLineCommentStart
+    //: invalidCommentContent ::= multiLineCommentEnd
     
-    //: multiLineComment ::= multiLineCommentStart commentContent** multiLineCommentEnd
+    //: validCommentContent ::= !invalidCommentContent printableChar
+    //: validCommentContent ::= eol
     
+    //: multiLineComment ::= multiLineCommentStart validCommentContent** multiLineCommentEnd
+    
+    //=================================================================
+    // Extension 1: Recognize Possible Nested Comments and display a warning
+    //=================================================================
+    
+    //: validCommentContent ::= # multiLineCommentStart =>
+    public void warnOnNestedComments(int position) {
+        warning(position, "Nested Comments not supported in MiniJava");
+    }
     
 }

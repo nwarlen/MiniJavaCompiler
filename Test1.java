@@ -9,6 +9,8 @@ class Blizzard {
     int a = 4;
     int b = a+215;
 
+    int c = 033;
+    int hex = 0x12f4;
     // comment
     // comment
     
@@ -16,7 +18,12 @@ class Blizzard {
     hellsdflakjsdnflkjasdflkjasdhflkjahsdlfkjahsdlkjfhalsdjhflaskjdhflkasjdhflaksjhflkjashdf
      */
     
-    char a = '$';
+    /*
+     /*
+
+    */
+    
+    char asd = '$';
     String x = "hello";
     String y = "";
 

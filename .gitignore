@@ -7,3 +7,5 @@
 #Class Files
 out
 
+#produced txt file
+TokenGrammarParseTable.java.txt
