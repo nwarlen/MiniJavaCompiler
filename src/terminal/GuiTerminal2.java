@@ -256,7 +256,7 @@ public class GuiTerminal2 extends JFrame
         public CheckRemoveDocumentFilter() {
             super();
         }
-        public void remove(DocumentFilter.FilterBypass fb,
+        public void remove(FilterBypass fb,
                        int offset,
                        int length)
                 throws BadLocationException {
@@ -272,7 +272,7 @@ class NoRemoveDocumentFilter extends DocumentFilter {
 	public NoRemoveDocumentFilter() {
 		super();
 	}
-	public void remove(DocumentFilter.FilterBypass fb,
+	public void remove(FilterBypass fb,
 			int offset,
 			int length)
 	throws BadLocationException {

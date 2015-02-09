@@ -20,6 +20,10 @@ public class ErrorMsg {
 		doFrame = false;
 	}
 	
+	public String getFileName() {
+		return filename;
+	}
+	
 	public void doFrame() {
 		doFrame = true;
 	}

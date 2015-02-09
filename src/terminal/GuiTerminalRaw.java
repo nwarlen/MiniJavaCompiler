@@ -230,7 +230,7 @@ public class GuiTerminalRaw extends JFrame
     public RawDocumentFilter() {
         super();
     }
-    public void remove(DocumentFilter.FilterBypass fb,
+    public void remove(FilterBypass fb,
                    int offset,
                    int length)
             throws BadLocationException {
@@ -243,7 +243,7 @@ public class GuiTerminalRaw extends JFrame
          }
     }
 
-    public void insertString(DocumentFilter.FilterBypass fb,
+    public void insertString(FilterBypass fb,
                      int offset,
                      String string,
                      AttributeSet attr)
@@ -259,7 +259,7 @@ public class GuiTerminalRaw extends JFrame
         }
     }
     
-    public void replace(DocumentFilter.FilterBypass fb,
+    public void replace(FilterBypass fb,
                     int offset,
                     int length,
                     String text,
