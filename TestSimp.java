@@ -35,6 +35,10 @@ class Main {
 			int whileTest = 1000;
 		}
 		
+		for(int i=12;i<100;i++) {
+			int looper = 5;
+		}
+		
 		if (lessThanOrEquals) {
 			int newInt = 4;
 		}

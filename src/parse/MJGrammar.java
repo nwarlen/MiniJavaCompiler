@@ -105,6 +105,16 @@ public class MJGrammar
 		return new Break(pos);
 	}
 	
+	//: <stmt> ::= # `; =>
+	public Statement newEmptyBlock(int pos) {
+		return new Block(pos, new StatementList());
+	}
+
+	//: <stmt> ::= # `{ <stmt>* `} =>
+	public Statement newBlock(int pos, List<Statement> sl) {
+		return new Block(pos, new StatementList(sl));
+	}
+	
 	//: <stmt> ::= <assign> `; => pass
 	
 	//: <stmt> ::= <if> => pass
@@ -122,8 +132,7 @@ public class MJGrammar
 	
 	//: <if> ::= # `if `( <exp> `) <stmt> !`else =>
 	public Statement newIfStatement(int pos, Exp exp1, Statement stmt1) {
-		return new If(pos,exp1,stmt1,null);
-		
+		return new If(pos,exp1,stmt1,new Block(pos, new StatementList()));
 	}
 	
 	//==================== while =====================================
@@ -134,30 +143,40 @@ public class MJGrammar
 	}
 	
 	//==================== for =======================================
-//	//: <stmt> ::= <for> => pass
-//	//: <for> ::= # `for `( <stmt>? `; <exp>? `; <stmt>? `) <stmt> =>
-//	public Statement newForLoop(int pos, Statement stmt1, Exp exp1, Statement stmt2, Statement stmt3) {
-//		//adapted from Slideset 8. (8.12)
-//		StatementList whileBlockList = new StatementList();
-//		whileBlockList.add(stmt3);
-//		whileBlockList.add(stmt2);
-//
-//		Block whileBlock = new Block(pos, whileBlockList);
-//		
-//		While forToWhileConvert = new While(pos,exp1,whileBlock);
-//
-//		StatementList list = new StatementList();
-//		list.add(stmt1);
-//		list.add(forToWhileConvert);
-//
-//		return new Block(pos,list);
-//	}
+	//: <stmt> ::= <for> => pass
 	
+	//: <forHelper1> ::= # <type> ID `= <exp> =>
+	public Statement newVarDeclForLoop(int pos, Type t, String id, Exp exp1) {
+		return new LocalVarDecl(pos,t,id,exp1);
+	}
+	//: <forHelper1> ::= <assign> => 
+	public Statement newAssignForLoop(Statement assignStmt) {
+		return assignStmt;
+	}
+	//: <forHelper1> ::= # <callExp> =>
+	public Statement newCallExpressionStatementForLoop(int pos, Exp callExp) {
+		return new ExpStatement(pos, callExp);
+	}
 	
+	//: <forHelper2> ::= <assign> => Statement newAssignForLoop(Statement)
+	//: <forHelper2> ::= # <callExp> => Statement newCallExpressionStatementForLoop(int,Exp)
 	
-	//: <stmt> ::= # `{ <stmt>* `} =>
-	public Statement newBlock(int pos, List<Statement> sl) {
-		return new Block(pos, new StatementList(sl));
+	//: <for> ::= # `for `( <forHelper1>? `; <exp>? `; <forHelper2>? `) <stmt> =>
+	public Statement newForLoop(int pos, Statement stmt1, Exp exp1, Statement stmt2, Statement stmt3) {
+		//adapted from Slideset 8. (8.12)
+		StatementList whileBlockList = new StatementList();
+		whileBlockList.add(stmt3);
+		whileBlockList.add(stmt2);
+
+		Block whileBlock = new Block(pos, whileBlockList);
+		
+		While forToWhileConvert = new While(pos,exp1,whileBlock);
+
+		StatementList list = new StatementList();
+		list.add(stmt1);
+		list.add(forToWhileConvert);
+
+		return new Block(pos,list);
 	}
 	//: <stmt> ::= <local var decl> `; => pass
 
@@ -216,7 +235,6 @@ public class MJGrammar
 	//================================================================
 
 	//=============   exp    ===================================
-	
 	//: <exp> ::= <exp> # `|| <exp2> =>
 	public Exp newOr(Exp exp1, int pos, Exp exp2) {
 		return new Or(pos,exp1,exp2);
@@ -262,22 +280,14 @@ public class MJGrammar
 	
 	//: <exp4> ::= <exp4> # `<= <exp5> =>
 	public Exp newLessThanOrEqual(Exp exp1, int pos, Exp exp2) {
-		// a <= b  -> (a < b || a = b)
-		return new Or(
-				pos,
-				new LessThan(pos,exp1,exp2),
-				new Equals(pos,exp1,exp2)
-		);
+		// a <= b  -> (!(a>b))
+		return new Not(pos, new GreaterThan(pos,exp1,exp2));
 	}
 	
 	//: <exp4> ::= <exp4> # `>= <exp5> =>
 	public Exp newGreaterThanOrEqual(Exp exp1, int pos, Exp exp2) {
-		// a >= b  -> (a > b || a = b)
-		return new Or(
-				pos,
-				new GreaterThan(pos,exp1,exp2),
-				new Equals(pos,exp1,exp2)
-		);
+		// a >= b  -> (!(a<b))
+		return new Not(pos, new LessThan(pos,exp1,exp2));
 	}
 	
 	//: <exp4> ::= <exp4> # `instanceof ID =>
