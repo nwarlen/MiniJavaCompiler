@@ -1,7 +1,9 @@
-class Main {
+class Main extends otherClass{
 	/* this is a comment 		   jjh   		hhh   */
 	/*/ this is another comment */
 	/*   /* this is another comment */
+	int instanceVar;
+	
 	public void main() {
 		int b = -3;
 		int n = 3+4*5;
@@ -21,6 +23,8 @@ class Main {
 		boolean lessThanOrEquals = 7<=4;
 		
 		//callExp => exp1 . ID ( expList )
+		
+		classType1 abc = new int[5][][][];
 		
 		int testing = mod.abc(1,2,3);
 		//abc.something();
@@ -48,5 +52,21 @@ class Main {
 		
 		boolean nn = (Object)(String)(Object)z;
 		int k = - - - -n;
+	}
+	
+	public void methodCall(int a,int b,int c,int d) {
+		
+		
+		do {
+			randomStuff();
+		}
+		while (i<4);
+		
+	}
+	
+	
+	public int newMethod(int a,int b, int c) {
+		
+		return abc;
 	}
 }

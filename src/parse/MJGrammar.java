@@ -64,18 +64,31 @@ public class MJGrammar
 		return new Program(pos, new ClassDeclList(vec));
 	}
 
-	//: <class decl> ::= `class # ID `{ <decl in class>* `} =>
-	public ClassDecl createClassDecl(int pos, String name, List<Decl> vec) {
-		return new ClassDecl(pos, name, "Object", new DeclList(vec));
+	//: <class decl> ::= `class # ID <extends>? `{ <decl in class>* `} =>
+	public ClassDecl createClassDecl(int pos, String name, String extendId, List<Decl> vec) {
+		if(extendId == null) {
+			extendId = "Object";
+		}
+		return new ClassDecl(pos, name, extendId, new DeclList(vec));
 	}
 
 	//: <decl in class> ::= <method decl> => pass
-	//: <method decl> ::= `public `void # ID `( `) `{ <stmt>* `} =>
-	public Decl createMethodDeclVoid(int pos, String name, List<Statement> stmts) {
-		return new MethodDeclVoid(pos, name, new VarDeclList(new VarDeclList()),
-				new StatementList(stmts));
-	}
+	//: <decl in class> ::= <inst var decl> => pass
 	
+	
+	//---------------- Extends -----------------------------
+	//: <extends> ::= `extends ID => pass
+	
+	
+	//: <method decl> ::= `public `void # ID `( <formalList> `) `{ <stmt>* `} =>
+	public Decl createMethodDeclVoid(int pos, String name, VarDeclList varDecls, List<Statement> stmts) {
+		return new MethodDeclVoid(pos, name, varDecls, new StatementList(stmts));
+	}
+
+	//: <method decl> ::= # `public <type> ID `( <formalList> `) `{ <stmt>* `return <exp> `; `} =>
+	public Decl createMethodDeclNonVoid(int pos, Type t, String id, VarDeclList varDecls, List<Statement> stmts, Exp exp1) {
+		return new MethodDeclNonVoid(pos,t,id,varDecls,new StatementList(stmts),exp1);
+	}
 
 	//: <type> ::= # `int =>
 	public Type intType(int pos) {
@@ -95,6 +108,19 @@ public class MJGrammar
 	}
 
 	//: <empty bracket pair> ::= `[ `] => null
+	
+	
+	//------------ InstVarDecl -------------------------------------
+	//: <inst var decl> ::= # <type> ID `; =>
+	public Decl newInstanceVariable(int pos, Type t, String id) {
+		return new InstVarDecl(pos, t, id);
+	}
+	
+	//------------ LocalVarDecl ------------------------------------
+	//: <local var decl> ::= <type> # ID `= <exp> =>
+	public Statement localVarDecl(Type t, int pos, String name, Exp init) {
+		return new LocalVarDecl(pos, t, name, init);
+	}
 
 	//================================================================
 	//statement-level program constructs
@@ -119,6 +145,7 @@ public class MJGrammar
 	
 	//: <stmt> ::= <if> => pass
 	//: <stmt> ::= <while> => pass
+	//: <stmt> ::= <do while> => pass
 	//: <stmt> ::= # <callExp> `; =>
 	public Statement newCallStatement(int pos, Exp exp1) {
 		return new ExpStatement(pos, exp1);
@@ -140,6 +167,21 @@ public class MJGrammar
 	//: <while> ::= # `while `( <exp> `) <stmt> =>
 	public Statement newWhileStatement(int pos, Exp exp1, Statement stmt1) {
 		return new While(pos,exp1,stmt1);
+	}
+	
+	//==================== do while =================================
+	
+	//Extension 1 -> do-while loops supported
+	
+	//: <do while> ::= # `do `{ <stmt> `} `while `( <exp> `) `; =>
+	public Statement newDoWhileStatement(int pos, Statement stmt1, Exp exp1) {
+		StatementList stmts = new StatementList();
+		stmts.add(stmt1);
+		Break b = new Break(pos);
+		stmts.add(new If(pos, new Not(pos, exp1), b, new Block(pos, new StatementList())));
+		Block statementBlock = new Block(pos, stmts);
+		
+		return new While(pos,new True(pos), statementBlock);
 	}
 	
 	//==================== for =======================================
@@ -225,11 +267,25 @@ public class MJGrammar
 		return new Assign(pos,exp,subOne);
 	}
 
-	//: <local var decl> ::= <type> # ID `= <exp> =>
-	public Statement localVarDecl(Type t, int pos, String name, Exp init) {
-		return new LocalVarDecl(pos, t, name, init);
+	//: <formalList> ::= <formalListHelper>? => pass
+	
+	//: <formalListHelper> ::= # <type> ID <moreList>* =>
+	public VarDeclList newFormalList(int pos, Type t, String id, List<VarDecl> decls) {
+		VarDeclList newList = new VarDeclList();
+		newList.add(new FormalDecl(pos,t,id));
+		
+		for(VarDecl decl : decls) {
+			newList.add(decl);
+		}
+		
+		return newList;
 	}
-
+	
+	//: <moreList> ::= # `, <type> ID =>
+	public VarDecl newFormalDecl(int pos, Type t, String id) {
+		return new FormalDecl(pos,t,id);
+	}
+	
 	//================================================================
 	//expressions
 	//================================================================
@@ -415,6 +471,20 @@ public class MJGrammar
 		IdentifierType t = new IdentifierType(pos, id);
 		
 		return new NewObject(pos,t);
+	}
+	
+	//: <bracketed expr> ::= `[ <exp8> `] => pass
+	//: <exp8> ::= # `new <type> !<empty bracket pair> <bracketed expr> <empty bracket pair>* =>
+	public Exp newArray(int pos, Type t, Exp exp1, List<Object> depth) {
+		ArrayType arrayType = new ArrayType(pos,t);
+		
+		//The arrayType has depth relative to the number of empty bracket pairs
+		// Concept from SlideSet 8 pg 3
+		for(Object unUsed : depth) {
+			arrayType = new ArrayType(pos,arrayType);
+		}
+		
+		return new NewArray(pos,arrayType,exp1);
 	}
 	
 	//: <exp8> ::= <callExp> => pass
