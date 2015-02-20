@@ -73,31 +73,43 @@ public class Sem1Visitor extends ASTvisitor {
         s3.visit(classRunMainDecl);
 
     }
-
+    
     public Object visitClassDecl(ClassDecl classDecl) {
-        //add class to gst, report err if already defined
-        if (this.getGlobalSymTab().containsKey(classDecl.name)) {
-            this.errorMsg.error(classDecl.pos, "Duplicate class declaration: " + classDecl.name);
-            return null;
-        }
-        else {
-            this.getGlobalSymTab().put(classDecl.name, classDecl);
-        }
+        //add class to gst
+        this.checkForDuplicatesAndInsert(this.globalSymTab, classDecl, "Duplicate class declaration: ");
         
         //(order matters)1. set current class to classDecl
         this.currentClass = classDecl;
         
         //(order matters)2. traverse subnodes. this will have the effect of populating class inst vars and meth sym tables
         return super.visitClassDecl(classDecl);
-        //FIXME: The ClassDecl ctor. has already init. the inst var and meth. sym tables with empty hash table objs
     }
 
+    public Object visitInstVarDecl(InstVarDecl instVarDecl) {
+        this.checkForDuplicatesAndInsert(this.currentClass.instVarTable, instVarDecl, "Duplicate instance variable declaration: ");
+        return null;
+    }
+    
+    public Object visitMethodDecl(MethodDecl methodDecl) {
+        this.checkForDuplicatesAndInsert(this.currentClass.methodTable, methodDecl, "Duplicate method declaration: ");
+        return null;
+    }
+
+    //helper function
+    private void checkForDuplicatesAndInsert(Hashtable table, Decl decl, String errMessage) {
+        boolean rtn = table.containsKey(decl.name);
+        if (rtn) {
+            this.errorMsg.error(decl.pos, errMessage + decl.name);
+        }
+        else {
+            table.put(decl.name, decl);
+        }
+    }
 
     private static ClassDecl createClass(String name, String superName) {
         return new ClassDecl(-1, name, superName, new DeclList());
     }
-    private static void addDummyMethod(ClassDecl dec, String methName,
-                                       String rtnTypeName, String[] parmTypeNames) {
+    private static void addDummyMethod(ClassDecl dec, String methName, String rtnTypeName, String[] parmTypeNames) {
         VarDeclList parmDecls = new VarDeclList();
         for (int i = 0; i < parmTypeNames.length; i++) {
             Type t = convertToType(parmTypeNames[i]);
@@ -139,7 +151,6 @@ public class Sem1Visitor extends ASTvisitor {
         globalSymTab = new Hashtable<String,ClassDecl>();
         currentClass = null;
     }
-
 }
 
 	
