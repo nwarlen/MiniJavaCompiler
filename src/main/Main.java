@@ -45,9 +45,9 @@ public class Main {
 		try {
 			this.openFiles();
 			AstNode ast = this.parseFile();
-//			Hashtable<String,ClassDecl> globalTab = this.semanticPhase1(ast);
-//			this.semanticPhase2(ast, globalTab);
-//			this.semanticPhase3(ast, globalTab);
+			Hashtable<String,ClassDecl> globalTab = this.semanticPhase1(ast);
+			this.semanticPhase2(ast, globalTab);
+			this.semanticPhase3(ast, globalTab);
 //			this.semanticPhase4(ast, globalTab);
 //			this.semanticPhase5(ast, globalTab);
 //			this.cgPhase1(ast, globalTab);
@@ -180,18 +180,14 @@ public class Main {
 	}
 	private AstNode parseFile() {
 
-	    //		if (SCANNER_ONLY) {
-	    //			// parse the original input, sending its data to the pipe
-	    //			new MJScannerParseTable(new MJScanner(errorMsg, System.out)).parse(inputStream,0,0);	
-	    //			return null;
-	    //		}
-	    //		else if (MJGrammar.FILTER_GRAMMAR) {
+		if (SCANNER_ONLY) {
+			// parse the original input, sending its data to the pipe
+			new MJScannerParseTable(new MJScanner(errorMsg, System.out)).parse(inputStream,0,false);	
+			return null;
+		}
+		else if (MJGrammar.FILTER_GRAMMAR) {
 			
 			try {
-//				// create a piped input and piped output stream, and connect them
-//				PipedInputStream is = new PipedInputStream();
-//				PipedOutputStream os = new PipedOutputStream();
-//				is.connect(os);
 				
 				ByteArrayOutputStream os = new ByteArrayOutputStream(1000000);
 				// parse the original input, sending its data to the pipe
@@ -206,7 +202,6 @@ public class Main {
 				
 				// create the semantic action object
 				MJGrammar mj = new MJGrammar(errorMsg);
-				
 
 				ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
 
@@ -221,42 +216,42 @@ public class Main {
 				System.err.println("Internal piping error.");
 				return null;
 			}
-			//		}
-			//		else {
-			//			// create the semantic action object
-			//			MJGrammarOld mj = new MJGrammarOld(errorMsg);
-			//			
-			//			// parse the input
-			//			new MJGrammarOldParseTable(mj).parse(inputStream,0,0);
-			//			
-			//			// return the result of the parse
-			//			return mj.parseResult();
-			//		}
+		}
+		else {
+			// create the semantic action object
+			MJGrammar mj = new MJGrammar(errorMsg);
+			
+			// parse the input
+			new MJGrammarParseTable(mj).parse(inputStream,0,false);
+			
+			// return the result of the parse
+			return mj.parseResult();
+		}
 	}
 	
-//	public Hashtable<String,ClassDecl> semanticPhase1(AstNode ast) {
-//		if (!errorMsg.anyErrors && ast != null && pass >= 2) {
-//			Sem1Visitor vis = new Sem1Visitor(errorMsg);
-//			vis.visit(ast);
-//			return vis.getGlobalSymTab();
-//		}
-//		else {
-//			return null;
-//		}
-//	}
-//	
-//	public void semanticPhase2(AstNode ast, Hashtable<String,ClassDecl> globalTbl) {
-//		if (!errorMsg.anyErrors && ast != null && pass >= 3) {
-//			new Sem2Visitor(globalTbl, errorMsg).visit(ast);
-//		}
-//	}
-//	
-//	public void semanticPhase3(AstNode ast, Hashtable<String,ClassDecl> globalTbl) {
-//		if (!errorMsg.anyErrors && ast != null && pass >= 4) {
-//			new Sem3Visitor(globalTbl, errorMsg).visit(ast);
-//		}
-//	}
-//	
+	public Hashtable<String,ClassDecl> semanticPhase1(AstNode ast) {
+		if (!errorMsg.anyErrors && ast != null && pass >= 2) {
+			Sem1Visitor vis = new Sem1Visitor(errorMsg);
+			vis.visit(ast);
+			return vis.getGlobalSymTab();
+		}
+		else {
+			return null;
+		}
+	}
+	
+	public void semanticPhase2(AstNode ast, Hashtable<String,ClassDecl> globalTbl) {
+		if (!errorMsg.anyErrors && ast != null && pass >= 3) {
+			new Sem2Visitor(globalTbl, errorMsg).visit(ast);
+		}
+	}
+	
+	public void semanticPhase3(AstNode ast, Hashtable<String,ClassDecl> globalTbl) {
+		if (!errorMsg.anyErrors && ast != null && pass >= 4) {
+			new Sem3Visitor(globalTbl, errorMsg).visit(ast);
+		}
+	}
+	
 //	public void semanticPhase4(AstNode ast, Hashtable<String,ClassDecl> globalTbl) {
 //		if (!errorMsg.anyErrors && ast != null && pass >= 5) {
 //			new Sem4Visitor(globalTbl, errorMsg).visit(ast);
@@ -353,17 +348,3 @@ public class Main {
 		System.exit(code);
 	}
 }
-
-//class WByteArrayInputStream extends ByteArrayInputStream {
-//	public WByteArrayInputStream(byte[] arr) {
-//		super(arr);
-//	}
-//	public int read() {
-//		int val = super.read();
-//		System.out.println("byte value: "+val);
-//		int rtnVal = pos < count ? super.read() & 0xff : -1;
-//		return rtnVal;
-//	}
-//}
-
-
