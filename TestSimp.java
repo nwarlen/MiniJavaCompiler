@@ -28,7 +28,7 @@ class Main extends otherClass{
 		
 		int testing = mod.abc(1,2,3);
 		//abc.something();
-		something();
+		something(a,b,c);
 		super.somethng();
 		
 		int thing = new Stuff();
