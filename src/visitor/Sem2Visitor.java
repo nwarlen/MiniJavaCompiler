@@ -25,6 +25,61 @@ public class Sem2Visitor extends ASTvisitor {
 		globalSymTab = globalTab;
 	}
 	
+    public Object visitProgram(Program program) {
+        //ensure no class has a super class of string or RunMain
+        for (ClassDecl classDecl : program.classDecls) {
+            if (classDecl.superName.equals("String") || classDecl.superName.equals("RunMain")) {
+                this.errorMsg.error(
+                        classDecl.pos, 
+                        "Class Declaration Extends " + classDecl.superName + ": " + classDecl
+                );
+            }
+        }
+        
+        //ensure no class is part of a cycle
+        int numberOfClasses = program.classDecls.size();
+        ClassDecl cycleDetectedClass = null;
+        
+        for (ClassDecl classDecl : program.classDecls) {
+            ClassDecl superClass = classDecl.superLink;
+            for (int numClassesVisited = 1;superClass != null && numClassesVisited <= numberOfClasses;numClassesVisited++) {
+                if (superClass.name.equals(classDecl.name)) {
+                    //cycle detected
+                    cycleDetectedClass = classDecl;
+                    break;
+                }
+                superClass = classDecl.superLink;
+            }
+            if (cycleDetectedClass != null) {
+                break;
+            }
+        }
+        
+        if (cycleDetectedClass != null) {
+            this.errorMsg.error(
+                    cycleDetectedClass.pos,
+                    "Class Declaration Cycle detected: " + cycleDetectedClass.name
+            );
+        }
+        
+        return super.visitProgram(program);
+    }
+    
+    public Object visitClassDecl(ClassDecl classDecl) {
+        //look up super class in GST
+        if (!this.globalSymTab.containsKey(classDecl.superName)) {
+            //if not there report an undefined class name error
+            this.errorMsg.error(classDecl.pos, "Undefined Class Name Error: " + classDecl.superName);
+        }
+        else {
+            //if there, set super class link in current class
+            //add current class to list of subclasses in super class
+            classDecl.superLink = this.globalSymTab.get(classDecl.superName);
+            classDecl.superLink.subclasses.add(classDecl);
+        }
+        
+        return null;
+    }
 }
 
-	
+
