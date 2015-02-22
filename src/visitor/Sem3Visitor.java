@@ -99,9 +99,12 @@ public class Sem3Visitor extends ASTvisitor {
     }
     
     public Object visitIdentifierExp(IdentifierExp identifierExp) {
-        if (identifierExp.name.equals(currentLocalDecl.name)) {
-            this.errorMsg.error(identifierExp.pos, "Invalid Variable declaration: " + identifierExp.name);
+        if (currentLocalDecl != null) {
+            if (identifierExp.name.equals(currentLocalDecl.name)) {
+                this.errorMsg.error(identifierExp.pos, "Invalid Variable declaration: " + identifierExp.name);
+            }
         }
+
         if (this.localSymTab.containsKey(identifierExp.name)) {
             identifierExp.link = this.localSymTab.get(identifierExp.name);
         }

@@ -29,7 +29,7 @@ public class Sem2Visitor extends ASTvisitor {
         Object returnObj = super.visitProgram(program);
         
         for(ClassDecl classDecl : program.classDecls) {
-            if (classDecl.superLink.name.equals("String") || classDecl.superLink.name.equals("RunMain") ) {
+            if (classDecl.superName.equals("String") || classDecl.superName.equals("RunMain") ) {
                 this.errorMsg.error(classDecl.pos, "Class extension disallowed: " + classDecl.superName);
             }
         }
@@ -57,10 +57,11 @@ public class Sem2Visitor extends ASTvisitor {
                 return classDecl.superLink;
             }
             
-            superClass = superClass.superLink;
+
             if (superClass == null) {
                 break;
             }
+            superClass = superClass.superLink;
         }
         
         return null;
