@@ -47,19 +47,32 @@ public class Sem3Visitor extends ASTvisitor {
         return super.visitMethodDecl(methodDecl);
     }
     
-    public Object visitVarDecl(VarDecl varDecl) {
-        this.currentLocalDecl = (LocalVarDecl)varDecl;
+    public Object visitLocalVarDecl(LocalVarDecl localVarDecl) {
+        this.currentLocalDecl = localVarDecl;
         
-        Object returnObj = super.visitVarDecl(varDecl);
+        Object returnObj = super.visitLocalVarDecl(localVarDecl);
         
-        if (this.localSymTab.containsKey(varDecl.name)) {
-            this.errorMsg.error(varDecl.pos, "Duplicate name error: " + varDecl.name);
+        if (this.localSymTab.containsKey(localVarDecl.name)) {
+            this.errorMsg.error(localVarDecl.pos, "Duplicate name error: " + localVarDecl.name);
         }
         else {
-            this.localSymTab.put(varDecl.name, varDecl);
+            this.localSymTab.put(localVarDecl.name, localVarDecl);
         }
         
         this.currentLocalDecl = null;
+        return returnObj;
+    }
+    
+    public Object visitFormalDecl(FormalDecl formalDecl) {
+        Object returnObj = super.visitFormalDecl(formalDecl);
+
+        if (this.localSymTab.containsKey(formalDecl.name)) {
+            this.errorMsg.error(formalDecl.pos, "Duplicate name error: " + formalDecl.name);
+        }
+        else {
+            this.localSymTab.put(formalDecl.name, formalDecl);
+        }
+        
         return returnObj;
     }
     
@@ -89,7 +102,6 @@ public class Sem3Visitor extends ASTvisitor {
         if (identifierExp.name.equals(currentLocalDecl.name)) {
             this.errorMsg.error(identifierExp.pos, "Invalid Variable declaration: " + identifierExp.name);
         }
-        
         if (this.localSymTab.containsKey(identifierExp.name)) {
             identifierExp.link = this.localSymTab.get(identifierExp.name);
         }
@@ -103,7 +115,6 @@ public class Sem3Visitor extends ASTvisitor {
                 }
                 currClass = currClass.superLink;
             }
-           
             if (currClass == null) {
                 this.errorMsg.error(identifierExp.pos, "Undefined Name Error: " + identifierExp.name);
             }
@@ -111,7 +122,35 @@ public class Sem3Visitor extends ASTvisitor {
          return null;
     }
     
+    public Object visitIdentifierType(IdentifierType identifierType) {
+        if (this.globalSymTab.containsKey(identifierType.name)) {
+            identifierType.link = globalSymTab.get(identifierType.name);
+        }
+        else {
+            this.errorMsg.error(identifierType.pos, "Undefined name error: " + identifierType.name);
+        }
+        return null;
+    }
     
+    public Object visitWhile(While loop) {
+        this.loopStack.push(loop);
+        Object returnObj = super.visitWhile(loop);
+        this.loopStack.pop();
+        
+        return returnObj;
+    }
+    
+    public Object visitBreak(Break break1) {
+        //if loopstack is empty report "break statement outside loop" error
+        if (loopStack.empty()) {
+            this.errorMsg.error(break1.pos, "Break statement outside loop");
+        }
+        else {
+            break1.loopLink = this.loopStack.peek();
+        }
+        
+        return null;
+    }
 }
 
 	

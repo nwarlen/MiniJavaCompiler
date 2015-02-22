@@ -82,7 +82,11 @@ public class Sem1Visitor extends ASTvisitor {
         this.currentClass = classDecl;
         
         //(order matters)2. traverse subnodes. this will have the effect of populating class inst vars and meth sym tables
-        return super.visitClassDecl(classDecl);
+        Object retrunObj = super.visitClassDecl(classDecl);
+        
+        this.currentClass = null;
+        
+        return retrunObj;
     }
 
     public Object visitInstVarDecl(InstVarDecl instVarDecl) {

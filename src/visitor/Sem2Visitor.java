@@ -24,47 +24,48 @@ public class Sem2Visitor extends ASTvisitor {
 	private void initInstanceVars(Hashtable<String,ClassDecl> globalTab) {
 		globalSymTab = globalTab;
 	}
-	
+
     public Object visitProgram(Program program) {
-        //ensure no class has a super class of string or RunMain
-        for (ClassDecl classDecl : program.classDecls) {
-            if (classDecl.superName.equals("String") || classDecl.superName.equals("RunMain")) {
-                this.errorMsg.error(
-                        classDecl.pos, 
-                        "Class Declaration Extends " + classDecl.superName + ": " + classDecl
-                );
+        Object returnObj = super.visitProgram(program);
+        
+        for(ClassDecl classDecl : program.classDecls) {
+            if (classDecl.superLink.name.equals("String") || classDecl.superLink.name.equals("RunMain") ) {
+                this.errorMsg.error(classDecl.pos, "Class extension disallowed: " + classDecl.superName);
             }
         }
         
-        //ensure no class is part of a cycle
-        int numberOfClasses = program.classDecls.size();
-        ClassDecl cycleDetectedClass = null;
-        
         for (ClassDecl classDecl : program.classDecls) {
-            ClassDecl superClass = classDecl.superLink;
-            for (int numClassesVisited = 1;superClass != null && numClassesVisited <= numberOfClasses;numClassesVisited++) {
-                if (superClass.name.equals(classDecl.name)) {
-                    //cycle detected
-                    cycleDetectedClass = classDecl;
-                    break;
-                }
-                superClass = classDecl.superLink;
+            if (findCycle(classDecl, program.classDecls.size()) != null) {
+                this.errorMsg.error(classDecl.pos, "Class Cycle Detected: " + classDecl);
             }
-            if (cycleDetectedClass != null) {
+        }
+        
+        return returnObj;
+    }
+
+    //helper function to find a cycle
+    //Adapted from Dr. Vegdahl's Slides (11.5)
+    private ClassDecl findCycle(ClassDecl classDecl, int numberOfClasses) {
+        ClassDecl superClass = classDecl.superLink;
+        
+        //follow super link path until
+        //  a cycle is found
+        //  we have run through all the classes
+        //  -- OR -- we finish the superlink chain
+        for(int index = 1; index <= numberOfClasses;index++) {
+            if (classDecl == superClass) {
+                return classDecl.superLink;
+            }
+            
+            superClass = superClass.superLink;
+            if (superClass == null) {
                 break;
             }
         }
         
-        if (cycleDetectedClass != null) {
-            this.errorMsg.error(
-                    cycleDetectedClass.pos,
-                    "Class Declaration Cycle detected: " + cycleDetectedClass.name
-            );
-        }
-        
-        return super.visitProgram(program);
+        return null;
     }
-    
+
     public Object visitClassDecl(ClassDecl classDecl) {
         //look up super class in GST
         if (!this.globalSymTab.containsKey(classDecl.superName)) {
@@ -77,7 +78,7 @@ public class Sem2Visitor extends ASTvisitor {
             classDecl.superLink = this.globalSymTab.get(classDecl.superName);
             classDecl.superLink.subclasses.add(classDecl);
         }
-        
+
         return null;
     }
 }
