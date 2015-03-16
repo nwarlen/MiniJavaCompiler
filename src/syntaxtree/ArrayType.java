@@ -31,6 +31,6 @@ public class ArrayType extends Type {
 	}
 	
 	public String toString2() {
-		return ""+baseType+"[]";
+		return ""+baseType.toString2()+"[]";
 	}
 }

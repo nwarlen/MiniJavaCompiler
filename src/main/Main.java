@@ -48,8 +48,8 @@ public class Main {
 			Hashtable<String,ClassDecl> globalTab = this.semanticPhase1(ast);
 			this.semanticPhase2(ast, globalTab);
 			this.semanticPhase3(ast, globalTab);
-//			this.semanticPhase4(ast, globalTab);
-//			this.semanticPhase5(ast, globalTab);
+			this.semanticPhase4(ast, globalTab);
+			this.semanticPhase5(ast, globalTab);
 //			this.cgPhase1(ast, globalTab);
 //			this.cgPhase2(ast);
 //			this.cgPhase3(ast);
@@ -252,17 +252,17 @@ public class Main {
 		}
 	}
 	
-//	public void semanticPhase4(AstNode ast, Hashtable<String,ClassDecl> globalTbl) {
-//		if (!errorMsg.anyErrors && ast != null && pass >= 5) {
-//			new Sem4Visitor(globalTbl, errorMsg).visit(ast);
-//		}
-//	}
-//	
-//	public void semanticPhase5(AstNode ast, Hashtable<String,ClassDecl> globalTbl) {
-//		if (!errorMsg.anyErrors && ast != null && pass >= 6) {
-//			new Sem5Visitor(errorMsg).visit(ast);
-//		}
-//	}
+	public void semanticPhase4(AstNode ast, Hashtable<String,ClassDecl> globalTbl) {
+		if (!errorMsg.anyErrors && ast != null && pass >= 5) {
+			new Sem4Visitor(globalTbl, errorMsg).visit(ast);
+		}
+	}
+	
+	public void semanticPhase5(AstNode ast, Hashtable<String,ClassDecl> globalTbl) {
+		if (!errorMsg.anyErrors && ast != null && pass >= 6) {
+			new Sem5Visitor(errorMsg).visit(ast);
+		}
+	}
 //	
 //	public void cgPhase1(AstNode ast, Hashtable<String,ClassDecl> globalTbl) {
 //		if (!errorMsg.anyErrors && ast != null && pass >= 7) {
