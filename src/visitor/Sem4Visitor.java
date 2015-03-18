@@ -226,6 +226,13 @@ public class Sem4Visitor extends ASTvisitor {
         }
     }
     
-    
+    private Type returnTypeFor(MethodDecl methodDecl) {
+        if (methodDecl instanceof MethodDeclVoid) {
+            return new VoidType(((MethodDeclVoid) methodDecl).pos);
+        }
+        
+        return ((MethodDeclNonVoid)methodDecl).rtnType;
+        
+    }
 }
 	
