@@ -65,5 +65,107 @@ public class Sem4Visitor extends ASTvisitor {
 			theStringType.link = globalSymTab.get("String");
 		}
 	}
+    
+    //Recommended Helper Methods
+    private boolean matchTypesExact(Type have, Type need, int pos) {
+        if (have == null || need == null) return false;
+        
+        if (have.equals(need)) {
+            //types equal
+            return true;
+        }
+        
+        if (pos >= 0) {
+            this.errorMsg.error(
+                    pos,
+                    "Incompatible types: Have -> " + have.toString2() + " Need -> " + need.toString2()
+            );
+        }
+        
+        return false;
+    }
+    
+    private boolean matchTypesAssign(Type src, Type target, int pos) {
+        //if either is null return false
+        if (src == null || target == null) {
+            return false;
+        }
+        
+        //else if either is void type print incompatible error and return false
+        else if (src instanceof VoidType || target instanceof VoidType) {
+            if (pos >= 0) {
+                this.errorMsg.error(pos, "Incompatible Types");
+            }
+            return false;
+        }
+        
+        //else if types are equal return true
+        else if (src.equals(target)) {
+            return true;
+        }
+        
+        //if source is null type return true if :
+            // target is identifier type
+            // or target is array type
+        if (src instanceof NullType) {
+            if (target instanceof IdentifierType || target instanceof ArrayType) {
+                return true;
+            }
+        }
+        
+        //if source is array type and target is identifier type with name Object, return true
+        if (src instanceof ArrayType && target instanceof IdentifierType) {
+            if (((IdentifierType) target).name.equals("Object")) {
+                return true;
+            }
+        }
+        
+        //if source is identifier type return true if: 
+            //target is a super class
+        if (src instanceof IdentifierType) {
+            ClassDecl classLink = ((IdentifierType)src).link;
+            AstNode[] targetLinks = target.links();
+            AstNode targetLink;
+            if (targetLinks.length > 0 ) {
+                targetLink = targetLinks[0];
+                String targetClassName = targetLink.getClass().getName();
+
+                while (classLink != null) {
+                    if (classLink.name.equals(targetClassName)) {
+                        //target is a super class, return true
+                        return true;
+                    }
+                    
+                    classLink = classLink.superLink;
+                }
+            }
+        }
+
+        //else print incompatible error if pos is > 0
+        //return false
+        if (pos >= 0) {
+            this.errorMsg.error(pos, "Incompatible Types");
+        }
+        return false;
+    }
+    
+    private boolean matchTypesEqCompare(Type t1, Type t2, int pos) {
+        //if either type is null return false
+        if (t1 == null || t2 == null) {
+            return false;
+        }
+        
+        //otherwise invoke matchTypesAssign twice, once with t1 first and once with t2 first use a neg position
+        //if either returns true, return true
+        if (matchTypesAssign(t1,t2,(-pos)) || matchTypesAssign(t2,t1,(-pos))) {
+            return true;
+        }
+        
+        //else print incompatible error (if pos >= 0) and return false
+        if (pos >= 0) {
+            this.errorMsg.error(pos, "Incompatible Types");
+        }
+        return false;
+    }
 }
 	
