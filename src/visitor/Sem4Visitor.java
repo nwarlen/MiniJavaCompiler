@@ -167,5 +167,65 @@ public class Sem4Visitor extends ASTvisitor {
         }
         return false;
     }
+    
+    private InstVarDecl instVarLookup(String name, ClassDecl classDecl, int pos, String msg) {
+        if (classDecl.instVarTable.containsKey(name)) {
+            return classDecl.instVarTable.get(name);
+        }
+
+        ClassDecl currentClass = classDecl.superLink;
+        while (currentClass != null) {
+            if (currentClass.instVarTable.containsKey(name)) {
+                return currentClass.instVarTable.get(name);
+            }
+            
+            currentClass = currentClass.superLink;
+        }
+        
+        this.errorMsg.error(pos, msg);
+        return null;
+    }
+    
+    private InstVarDecl instVarLookup(String name, Type t, int pos, String msg) {
+        if (t == null) {
+            return null;
+        } else if (!(t instanceof IdentifierType)) {
+            this.errorMsg.error(pos, msg);
+            return null;
+        } else {
+            return instVarLookup(name, ((IdentifierType) t).link, pos, msg);
+        }
+    }
+    
+    private MethodDecl methodLookup(String name, ClassDecl classDecl, int pos, String msg) {
+        if (classDecl.methodTable.containsKey(name)) {
+            return classDecl.methodTable.get(name);
+        }
+
+        ClassDecl currentClass = classDecl.superLink;
+        while (currentClass != null) {
+            if (currentClass.methodTable.containsKey(name)) {
+                return currentClass.methodTable.get(name);
+            }
+
+            currentClass = currentClass.superLink;
+        }
+
+        this.errorMsg.error(pos, msg);
+        return null;
+    }
+    
+    private MethodDecl methodLookup(String name, Type t, int pos, String msg) {
+        if (t == null) {
+            return null;
+        } else if (!(t instanceof IdentifierType)) {
+            this.errorMsg.error(pos, msg);
+            return null;
+        } else {
+            return methodLookup(name, ((IdentifierType) t).link, pos, msg);
+        }
+    }
+    
+    
 }
 	
