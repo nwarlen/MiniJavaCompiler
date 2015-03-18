@@ -232,7 +232,56 @@ public class Sem4Visitor extends ASTvisitor {
         }
         
         return ((MethodDeclNonVoid)methodDecl).rtnType;
-        
     }
+    
+    public Object visitIntegerLiteral(IntegerLiteral integerLiteral) {
+        Object returnObj = super.visitIntegerLiteral(integerLiteral);
+        integerLiteral.type = this.theIntType;
+        return returnObj;
+    }
+    
+    public Object visitNull(Null nullExp) {
+        Object returnObj = super.visitNull(nullExp);
+        nullExp.type = this.theNullType;
+        return returnObj;
+    }
+    
+    public Object visitStringLiteral(StringLiteral stringLiteral) {
+        Object returnObject = super.visitStringLiteral(stringLiteral);
+        stringLiteral.type = this.theStringType;
+        return returnObject;
+    }
+    
+    public Object visitTrue(True trueExp) {
+        Object returnObject = super.visitTrue(trueExp);
+        trueExp.type = this.theBoolType;
+        return returnObject;
+    }
+    
+    public Object visitFalse(False falseExp) {
+        Object returnObject = super.visitFalse(falseExp);
+        falseExp.type = this.theBoolType;
+        return returnObject;
+    }
+    
+    public Object visitIdentifierExp(IdentifierExp identifierExp) {
+        Object returnObject = super.visitIdentifierExp(identifierExp);
+        identifierExp.type = identifierExp.link.type;
+        return returnObject;
+    }
+    
+    public Object visitThis(This thisExp) {
+        Object returnObject = super.visitThis(thisExp);
+        thisExp.type = this.currentClassType;
+        return returnObject;
+    }
+    
+    public Object visitSuper(Super superExp) {
+        Object returnObject = super.visitSuper(superExp);
+        superExp.type = currentSuperclassType;
+        return returnObject;
+    }
+    
+    
 }
 	
