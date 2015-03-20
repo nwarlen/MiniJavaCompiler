@@ -368,7 +368,7 @@ public class Sem4Visitor extends ASTvisitor {
             not.type = this.theBoolType;
         }
         else {
-            this.errorMsg.error(not.pos, "Invalid Type");
+            this.errorMsg.error(not.pos, "Invalid Type. Expression must be boolean type");
             not.type = null;
         }
         return returnObject;
@@ -382,7 +382,7 @@ public class Sem4Visitor extends ASTvisitor {
             and.type = this.theBoolType;
         }
         else {
-            this.errorMsg.error(and.pos, "Invalid Types");
+            this.errorMsg.error(and.pos, "Invalid Types. Both operands must be boolean type");
             and.type = null;
         }
         return returnObject;
@@ -396,9 +396,59 @@ public class Sem4Visitor extends ASTvisitor {
             or.type = this.theBoolType;
         }
         else {
-            this.errorMsg.error(or.pos, "Invalid Types");
+            this.errorMsg.error(or.pos, "Invalid Types. Both operands must be boolean type");
             or.type = null;
         }
+        return returnObject;
+    }
+    
+    public Object visitArrayLength(ArrayLength arrayLength) {
+        Object returnObject = super.visitArrayLength(arrayLength);
+        if (arrayLength.exp != null && arrayLength.exp.type instanceof ArrayType) {
+            arrayLength.type = this.theIntType;
+        }
+        else {
+            this.errorMsg.error(arrayLength.pos, "Invalid Type. Expression must be array");
+            arrayLength.type = null;
+        }
+        return returnObject;
+    }
+    
+    public Object visitArrayLookup(ArrayLookup arrayLookup) {
+        Object returnObject = super.visitArrayLookup(arrayLookup);
+        
+        boolean b = matchTypesExact(arrayLookup.idxExp.type, this.theIntType, arrayLookup.pos);
+        b = b && (arrayLookup.arrExp != null && arrayLookup.arrExp.type instanceof ArrayType);
+        
+        if (b) {
+            arrayLookup.type = arrayLookup.arrExp.type;
+        }
+        else {
+            this.errorMsg.error(arrayLookup.pos, "Invalid Type. Expression must be int type and array must be array type");
+            arrayLookup.type = null;
+        }
+        return returnObject;
+    }
+    
+    public Object visitInstVarAccess(InstVarAccess instVarAccess) {
+        Object returnObject = super.visitInstVarAccess(instVarAccess);
+        
+        if (instVarAccess.exp.type == null) {
+            return returnObject;
+        }
+        
+        InstVarDecl instVarDecl = instVarLookup(
+                instVarAccess.varName,
+                instVarAccess.exp.type,
+                instVarAccess.pos,
+                "Error: Instance Variable " + instVarAccess.varName + " not found"
+        );
+        
+        if (instVarDecl != null) {
+            instVarAccess.varDec = instVarDecl;
+            instVarAccess.type = instVarDecl.type;
+        }
+        
         return returnObject;
     }
     
