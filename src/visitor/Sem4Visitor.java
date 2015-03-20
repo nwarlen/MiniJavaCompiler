@@ -282,6 +282,126 @@ public class Sem4Visitor extends ASTvisitor {
         return returnObject;
     }
     
+    //---------------- Binary Expressions ---------------------------------
+    
+    public Object visitPlus(Plus plus) {
+        Object returnObject = super.visitPlus(plus);
+        checkBinaryExp(plus, 0);
+        return returnObject;
+    }
+    
+    public Object visitMinus(Minus minus) {
+        Object returnObject = super.visitMinus(minus);
+        checkBinaryExp(minus, 0);
+        return returnObject;
+    }
+    
+    public Object visitTimes(Times times) {
+        Object returnObject = super.visitTimes(times);
+        checkBinaryExp(times, 0);
+        return returnObject;
+    }
+    
+    public Object visitDivide(Divide divide) {
+        Object returnObject = super.visitDivide(divide);
+        checkBinaryExp(divide, 0);
+        return returnObject;
+    }
+    
+    public Object visitRemainder(Remainder remainder) {
+        Object returnObject = super.visitRemainder(remainder);
+        checkBinaryExp(remainder, 0);
+        return returnObject;
+    }
+    
+    public Object visitGreaterThan(GreaterThan greaterThan) {
+        Object returnObject = super.visitGreaterThan(greaterThan);
+        checkBinaryExp(greaterThan, 1);
+        return returnObject;
+    }
+    
+    public Object visitLessThan(LessThan lessThan) {
+        Object returnObject = super.visitLessThan(lessThan);
+        checkBinaryExp(lessThan, 1);
+        return returnObject;
+    }
+    
+    private void checkBinaryExp(BinExp binExp, int flag) {
+        if (matchTypesExact(binExp.left.type,this.theIntType,binExp.pos) && 
+                matchTypesExact(binExp.right.type, this.theIntType, binExp.pos)) {
+            switch (flag) {
+                case 0: //intType flag
+                    binExp.type = this.theIntType;
+                    break;
+                case 1: //boolType flag
+                    binExp.type = this.theBoolType;
+                    break;
+                default:
+                    break;
+            }
+        }
+        else {
+            this.errorMsg.error(binExp.pos, "Inconsistent Types");
+            binExp.type = null;
+        }
+    }
+
+    //---------------- End Binary Expressions ---------------------------------
+    
+    //---------------- Equality and Conditions --------------------------------
+    
+    public Object visitEquals(Equals equals) {
+        Object returnObject = super.visitEquals(equals);
+        if (matchTypesEqCompare(equals.left.type, equals.right.type, equals.pos)) {
+            equals.type = this.theBoolType;
+        }
+        else {
+            this.errorMsg.error(equals.pos, "Inconsistent Types");
+            equals.type = null;
+        }
+        return returnObject;
+    }
+    
+    public Object visitNot(Not not) {
+        Object returnObject = super.visitNot(not);
+        if (matchTypesExact(not.type,this.theBoolType,not.pos)) {
+            not.type = this.theBoolType;
+        }
+        else {
+            this.errorMsg.error(not.pos, "Invalid Type");
+            not.type = null;
+        }
+        return returnObject;
+    }
+    
+    public Object visitAnd(And and) {
+        Object returnObject = super.visitAnd(and);
+        if (matchTypesExact(and.left.type, this.theBoolType, and.pos) &&
+                matchTypesExact(and.right.type, this.theBoolType, and.pos)) {
+
+            and.type = this.theBoolType;
+        }
+        else {
+            this.errorMsg.error(and.pos, "Invalid Types");
+            and.type = null;
+        }
+        return returnObject;
+    }
+    
+    public Object visitOr(Or or) {
+        Object returnObject = super.visitOr(or);
+        if (matchTypesExact(or.left.type, this.theBoolType, or.pos) &&
+                matchTypesExact(or.right.type, this.theBoolType, or.pos)) {
+
+            or.type = this.theBoolType;
+        }
+        else {
+            this.errorMsg.error(or.pos, "Invalid Types");
+            or.type = null;
+        }
+        return returnObject;
+    }
+    
     
 }
 	
