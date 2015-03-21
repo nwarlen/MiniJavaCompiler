@@ -452,6 +452,47 @@ public class Sem4Visitor extends ASTvisitor {
         return returnObject;
     }
     
+    public Object visitCast(Cast cast) {
+        Object returnObject = super.visitCast(cast);
+        
+        Type expType = cast.exp.type;
+        Type castType = cast.castType;
+        
+        if (matchTypesAssign(expType, castType, cast.pos) || matchTypesAssign(castType, expType, cast.pos)) {
+            cast.type = castType;
+        }
+        else {
+            this.errorMsg.error(cast.pos, "Incompatible types");
+            cast.type = null;
+        }
+        
+        return returnObject;
+    }
+    
+    public Object visitInstanceOf(InstanceOf instanceOf) {
+        Object returnObject = super.visitInstanceOf(instanceOf);
+        
+        Type expType = instanceOf.exp.type;
+        Type checkType = instanceOf.checkType;
+        
+        if (matchTypesAssign(expType, checkType, instanceOf.pos) || matchTypesAssign(checkType, expType, instanceOf.pos)) {
+            instanceOf.type = this.theBoolType;
+        }
+        else {
+            this.errorMsg.error(instanceOf.pos, "Incompatible types");
+            instanceOf.type = null;
+        }
+        return returnObject;
+    }
+    
+    public Object visitNewObject(NewObject newObject) {
+        Object returnObject = super.visitNewObject(newObject);
+        
+        newObject.type = newObject.objType;
+        
+        return returnObject;
+    }
+    
     
 }
 	
