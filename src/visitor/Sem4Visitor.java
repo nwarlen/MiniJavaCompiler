@@ -558,5 +558,53 @@ public class Sem4Visitor extends ASTvisitor {
         
         return returnObject;
     }
-}
+    
+    public Object visitAssign(Assign assign) {
+        Object returnObject = super.visitAssign(assign);
+        
+        //check lhs is an l value (idExp, ArrayLookup, or InstVarAccess)
+        if (assign.lhs instanceof IdentifierExp || assign.lhs instanceof ArrayLookup || assign.lhs instanceof InstVarAccess) {
+            Type rightHandType = assign.rhs.type;
+            Type leftHandType = assign.lhs.type;
+            
+            if (!matchTypesAssign(leftHandType, rightHandType, -20)) {
+                this.errorMsg.error(assign.pos, "Incompatible types. Attempting to assign " + leftHandType.toString2() + " to " + rightHandType.toString2());
+            }
+        }
+        else {
+            this.errorMsg.error(assign.pos, "Incorrect Type. Left Hand Side incompatible");
+        }
+        return returnObject;
+    }
+    
+    public Object visitLocalVarDecl(LocalVarDecl localVarDecl) {
+        Object returnObject = super.visitLocalVarDecl(localVarDecl);
+        Exp initExp = localVarDecl.initExp;
+        
+        if (!matchTypesAssign(initExp.type, localVarDecl.type, -20)) {
+            this.errorMsg.error(localVarDecl.pos, "Incorrect type for variable declaration");
+        }
+        
+        return returnObject;
+    }
+    
+    public Object visitIf(If ifStatement) {
+        Object returnObject = super.visitIf(ifStatement);
+        
+        if (!matchTypesExact(ifStatement.exp.type, this.theBoolType, -20)) {
+            this.errorMsg.error(ifStatement.pos, "Incorrect type: Expression must be boolean");
+        }
+        return returnObject;
+    }
+    
+    public Object visitWhile(While whileStatement) {
+        Object returnObject = super.visitWhile(whileStatement);
+        
+        if(!matchTypesExact(whileStatement.exp.type, this.theBoolType, -20)) {
+            this.errorMsg.error(whileStatement.pos, "Incorrect type: Expression must be boolean");
+        }
+        return returnObject;
+    }
+    
+
 	

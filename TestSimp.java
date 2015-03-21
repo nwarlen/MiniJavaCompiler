@@ -13,8 +13,13 @@ class Class1 extends Lib {
 			break;
 		}
 		super.printInt(a);
+        methodTest(a);
 		return "Jelly";
 	}
+    
+    public int methodTest(int x) {
+        return x*10;
+    }
 }
 class Class2 extends Class1 {
 	public void exec() {
