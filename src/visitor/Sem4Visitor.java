@@ -493,6 +493,64 @@ public class Sem4Visitor extends ASTvisitor {
         return returnObject;
     }
     
+    public Object visitNewArray(NewArray newArray) {
+        Object returnObject = super.visitNewArray(newArray);
+        
+        if (matchTypesExact(newArray.sizeExp.type, this.theIntType, newArray.pos)) {
+            newArray.type = newArray.objType;
+        }
+        else {
+            this.errorMsg.error(newArray.pos, "Incompatible types");
+            newArray.type = null;
+        }
+        return returnObject;
+    }
     
+    public Object visitCall(Call call) {
+        Object returnObject = super.visitCall(call);
+        
+        if (call.obj.type == null) {
+            return returnObject;
+        }
+        
+        MethodDecl methodDecl = methodLookup(
+                call.methName,
+                call.obj.type,
+                call.pos,
+                "Error: Method " + call.methName + " not found"
+        );
+        
+        if (methodDecl != null) {
+            int numParams = call.parms.size();
+            int methodNumParams = methodDecl.formals.size();
+            
+            if (numParams == methodNumParams) {
+                boolean compatibleParams = true;
+                for (int i = 0; i < numParams; i++) {
+                    VarDecl methodParam = methodDecl.formals.get(i);
+                    Exp param = call.parms.get(i);
+                    
+                    if (!matchTypesAssign(param.type, methodParam.type, call.pos)) {
+                        compatibleParams = false;
+                        break;
+                    }
+                }
+                
+                if (compatibleParams) {
+                    call.type = ((MethodDeclNonVoid)methodDecl).rtnType;
+                }
+                else {
+                    this.errorMsg.error(call.pos, "Parameter Type Mismatch");
+                    call.type = null;
+                }
+            }
+            else {
+                this.errorMsg.error(call.pos, "Incorrect Number of Parameters");
+                call.type = null;
+            }
+        }
+        
+        return returnObject;
+    }
 }
 	
