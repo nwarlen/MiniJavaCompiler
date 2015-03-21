@@ -126,17 +126,20 @@ public class Sem4Visitor extends ASTvisitor {
             ClassDecl classLink = ((IdentifierType)src).link;
             AstNode[] targetLinks = target.links();
             AstNode targetLink;
-            if (targetLinks.length > 0 ) {
-                targetLink = targetLinks[0];
-                String targetClassName = targetLink.getClass().getName();
+            
+            if (targetLinks != null) {
+                if (targetLinks.length > 0 ) {
+                    targetLink = targetLinks[0];
+                    String targetClassName = targetLink.getClass().getName();
 
-                while (classLink != null) {
-                    if (classLink.name.equals(targetClassName)) {
-                        //target is a super class, return true
-                        return true;
+                    while (classLink != null) {
+                        if (classLink.name.equals(targetClassName)) {
+                            //target is a super class, return true
+                            return true;
+                        }
+
+                        classLink = classLink.superLink;
                     }
-                    
-                    classLink = classLink.superLink;
                 }
             }
         }
@@ -341,7 +344,6 @@ public class Sem4Visitor extends ASTvisitor {
             }
         }
         else {
-            this.errorMsg.error(binExp.pos, "Inconsistent Types");
             binExp.type = null;
         }
     }
@@ -376,8 +378,8 @@ public class Sem4Visitor extends ASTvisitor {
     
     public Object visitAnd(And and) {
         Object returnObject = super.visitAnd(and);
-        if (matchTypesExact(and.left.type, this.theBoolType, and.pos) &&
-                matchTypesExact(and.right.type, this.theBoolType, and.pos)) {
+        if (matchTypesExact(and.left.type, this.theBoolType, -20) &&
+                matchTypesExact(and.right.type, this.theBoolType, -20)) {
 
             and.type = this.theBoolType;
         }
@@ -458,11 +460,11 @@ public class Sem4Visitor extends ASTvisitor {
         Type expType = cast.exp.type;
         Type castType = cast.castType;
         
-        if (matchTypesAssign(expType, castType, cast.pos) || matchTypesAssign(castType, expType, cast.pos)) {
+        if (matchTypesAssign(expType, castType, -20) || matchTypesAssign(castType, expType, -20)) {
             cast.type = castType;
         }
         else {
-            this.errorMsg.error(cast.pos, "Incompatible types");
+            this.errorMsg.error(cast.pos, "Incompatible types used for cast");
             cast.type = null;
         }
         
@@ -475,11 +477,11 @@ public class Sem4Visitor extends ASTvisitor {
         Type expType = instanceOf.exp.type;
         Type checkType = instanceOf.checkType;
         
-        if (matchTypesAssign(expType, checkType, instanceOf.pos) || matchTypesAssign(checkType, expType, instanceOf.pos)) {
+        if (matchTypesAssign(expType, checkType, -20) || matchTypesAssign(checkType, expType, -20)) {
             instanceOf.type = this.theBoolType;
         }
         else {
-            this.errorMsg.error(instanceOf.pos, "Incompatible types");
+            this.errorMsg.error(instanceOf.pos, "Incompatible types used for instanceof");
             instanceOf.type = null;
         }
         return returnObject;
@@ -500,7 +502,6 @@ public class Sem4Visitor extends ASTvisitor {
             newArray.type = newArray.objType;
         }
         else {
-            this.errorMsg.error(newArray.pos, "Incompatible types");
             newArray.type = null;
         }
         return returnObject;
@@ -530,14 +531,19 @@ public class Sem4Visitor extends ASTvisitor {
                     VarDecl methodParam = methodDecl.formals.get(i);
                     Exp param = call.parms.get(i);
                     
-                    if (!matchTypesAssign(param.type, methodParam.type, call.pos)) {
+                    if (!matchTypesAssign(param.type, methodParam.type, -20)) {
                         compatibleParams = false;
                         break;
                     }
                 }
                 
                 if (compatibleParams) {
-                    call.type = ((MethodDeclNonVoid)methodDecl).rtnType;
+                    if(methodDecl instanceof MethodDeclNonVoid) {
+                        call.type = ((MethodDeclNonVoid)methodDecl).rtnType;
+                    }
+                    else {
+                        call.type = new VoidType(call.pos);
+                    }
                 }
                 else {
                     this.errorMsg.error(call.pos, "Parameter Type Mismatch");
