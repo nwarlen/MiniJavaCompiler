@@ -568,7 +568,7 @@ public class Sem4Visitor extends ASTvisitor {
             Type leftHandType = assign.lhs.type;
 
             if (!matchTypesAssign(leftHandType, rightHandType, -20)) {
-                this.errorMsg.error(assign.pos, "Incompatible types. Attempting to assign " + leftHandType.toString2() + " to " + rightHandType.toString2());
+                this.errorMsg.error(assign.pos, "Incompatible types. Attempting incorrect assignment");
             }
         }
         else {
@@ -623,7 +623,7 @@ public class Sem4Visitor extends ASTvisitor {
                     boolean matching = true;
                     for (int i=0;i<origParams.size();i++) {
                         if (!matchTypesExact(origParams.get(i).type, superParams.get(i).type, -20)) {
-                            //error parameter type mismatch
+                            //parameter type mismatch
                             matching = false;
                         }
                     }
@@ -637,6 +637,63 @@ public class Sem4Visitor extends ASTvisitor {
         return returnObject;
     }
     
+    public Object visitMethodDeclNonVoid(MethodDeclNonVoid methodDeclNonVoid) {
+        Object returnObject = super.visitMethodDeclNonVoid(methodDeclNonVoid);
+        
+        Type returnExpressionType = methodDeclNonVoid.rtnExp.type;
+        Type returnType = methodDeclNonVoid.rtnType;
+        
+        if (!matchTypesAssign(returnExpressionType, returnType, -20)) {
+            this.errorMsg.error(methodDeclNonVoid.pos, "Error: Must return: " + returnType.toString2());
+        }
+        else {
+            ClassDecl superClass = this.currentClass.superLink;
+
+            MethodDecl methodDecl = methodLookup(methodDeclNonVoid.name, superClass, methodDeclNonVoid.pos, "No Super Method Found");
+            
+            if (methodDecl instanceof MethodDeclNonVoid) {
+                //check number and type of params
+                VarDeclList origParams = methodDeclNonVoid.formals;
+                VarDeclList superParams = methodDecl.formals;
+
+                if (origParams.size() == superParams.size()) {
+                    boolean matching = true;
+                    for (int i=0;i<origParams.size();i++) {
+                        if (!matchTypesExact(origParams.get(i).type, superParams.get(i).type, -20)) {
+                            //parameter type mismatch
+                            matching = false;
+                        }
+                    }
+                    if (matching) {
+                        //set super method to methodDecl
+                        if (matchTypesExact(methodDeclNonVoid.rtnType, ((MethodDeclNonVoid) methodDecl).rtnType, -20)) {
+                            methodDeclNonVoid.superMethod = methodDecl;
+                        }
+                        else {
+                            this.errorMsg.error(methodDeclNonVoid.pos, "Super method with different return type found");
+                        }
+                    }
+                }
+            }
+        }
+        return returnObject;
+    }
     
+    public Object visitClassDecl(ClassDecl classDecl) {
+        this.currentClass = classDecl;
+        
+        IdentifierType type = new IdentifierType(classDecl.pos,classDecl.name);
+        type.link = classDecl;
+        this.currentClassType = type;
+        
+        ClassDecl superClass = classDecl.superLink;
+        
+        if (superClass != null) {
+            IdentifierType superType = new IdentifierType(superClass.pos, superClass.name);
+            superType.link = superClass;
+        }
+        
+        return super.visitClassDecl(classDecl);
+    }
 }
 	
