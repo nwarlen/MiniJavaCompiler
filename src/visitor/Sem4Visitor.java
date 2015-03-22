@@ -605,5 +605,38 @@ public class Sem4Visitor extends ASTvisitor {
         }
         return returnObject;
     }
+    
+    public Object visitMethodDeclVoid(MethodDeclVoid methodDeclVoid) {
+        Object returnObject = super.visitMethodDeclVoid(methodDeclVoid);
+        
+        ClassDecl superClass = this.currentClass.superLink;
+
+        MethodDecl methodDecl = methodLookup(methodDeclVoid.name, superClass, methodDeclVoid.pos, "No Super Method Found");
+        
+        if (methodDecl != null) {
+            if (methodDecl instanceof MethodDeclVoid) {
+                //check number and type of params
+                VarDeclList origParams = methodDeclVoid.formals;
+                VarDeclList superParams = methodDecl.formals;
+                
+                if (origParams.size() == superParams.size()) {
+                    boolean matching = true;
+                    for (int i=0;i<origParams.size();i++) {
+                        if (!matchTypesExact(origParams.get(i).type, superParams.get(i).type, -20)) {
+                            //error parameter type mismatch
+                            matching = false;
+                        }
+                    }
+                    if (matching) {
+                        //set super method to methodDecl
+                        methodDeclVoid.superMethod = methodDecl;
+                    }
+                }
+            }
+        }
+        return returnObject;
+    }
+    
+    
 }
 	
