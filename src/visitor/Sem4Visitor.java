@@ -122,25 +122,19 @@ public class Sem4Visitor extends ASTvisitor {
 
         //if source is identifier type return true if: 
             //target is a super class
-        if (src instanceof IdentifierType) {
+        if (src instanceof IdentifierType && target instanceof IdentifierType) {
             ClassDecl classLink = ((IdentifierType)src).link;
-            AstNode[] targetLinks = target.links();
-            AstNode targetLink;
-
-            if (targetLinks != null) {
-                if (targetLinks.length > 0 ) {
-                    targetLink = targetLinks[0];
-                    String targetClassName = targetLink.getClass().getName();
-
-                    while (classLink != null) {
-                        if (classLink.name.equals(targetClassName)) {
-                            //target is a super class, return true
-                            return true;
-                        }
-
-                        classLink = classLink.superLink;
-                    }
+            ClassDecl targetLink = ((IdentifierType)target).link;
+            
+            
+            String targetClassName = targetLink.name;
+            while (classLink != null) {
+                if (classLink.name.equals(targetClassName)) {
+                    //target is a super class, return true
+                    return true;
                 }
+
+                classLink = classLink.superLink;
             }
         }
 
@@ -237,6 +231,8 @@ public class Sem4Visitor extends ASTvisitor {
         return ((MethodDeclNonVoid)methodDecl).rtnType;
     }
 
+    
+    //END HELPER METHODS
     public Object visitIntegerLiteral(IntegerLiteral integerLiteral) {
         Object returnObj = super.visitIntegerLiteral(integerLiteral);
         integerLiteral.type = this.theIntType;
@@ -366,7 +362,7 @@ public class Sem4Visitor extends ASTvisitor {
 
     public Object visitNot(Not not) {
         Object returnObject = super.visitNot(not);
-        if (matchTypesExact(not.type,this.theBoolType,not.pos)) {
+        if (matchTypesExact(not.type,this.theBoolType,-20)) {
             not.type = this.theBoolType;
         }
         else {
@@ -392,8 +388,8 @@ public class Sem4Visitor extends ASTvisitor {
 
     public Object visitOr(Or or) {
         Object returnObject = super.visitOr(or);
-        if (matchTypesExact(or.left.type, this.theBoolType, or.pos) &&
-                matchTypesExact(or.right.type, this.theBoolType, or.pos)) {
+        if (matchTypesExact(or.left.type, this.theBoolType, -20) &&
+                matchTypesExact(or.right.type, this.theBoolType, -20)) {
 
             or.type = this.theBoolType;
         }
@@ -419,7 +415,7 @@ public class Sem4Visitor extends ASTvisitor {
     public Object visitArrayLookup(ArrayLookup arrayLookup) {
         Object returnObject = super.visitArrayLookup(arrayLookup);
 
-        boolean b = matchTypesExact(arrayLookup.idxExp.type, this.theIntType, arrayLookup.pos);
+        boolean b = matchTypesExact(arrayLookup.idxExp.type, this.theIntType, -20);
         b = b && (arrayLookup.arrExp != null && arrayLookup.arrExp.type instanceof ArrayType);
 
         if (b) {
