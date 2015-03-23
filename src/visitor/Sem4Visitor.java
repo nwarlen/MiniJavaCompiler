@@ -179,7 +179,9 @@ public class Sem4Visitor extends ASTvisitor {
             currentClass = currentClass.superLink;
         }
 
-        this.errorMsg.error(pos, msg);
+        if (pos >=0) {
+            this.errorMsg.error(pos, msg);
+        }
         return null;
     }
 
@@ -208,7 +210,9 @@ public class Sem4Visitor extends ASTvisitor {
             currentClass = currentClass.superLink;
         }
 
-        this.errorMsg.error(pos, msg);
+        if (pos >=0) {
+            this.errorMsg.error(pos, msg);
+        }
         return null;
     }
 
@@ -563,8 +567,10 @@ public class Sem4Visitor extends ASTvisitor {
             Type rightHandType = assign.rhs.type;
             Type leftHandType = assign.lhs.type;
 
-            if (!matchTypesAssign(leftHandType, rightHandType, -20)) {
-                this.errorMsg.error(assign.pos, "Incompatible types. Attempting incorrect assignment");
+            if (!matchTypesAssign(rightHandType, leftHandType, -20)) {
+                if (leftHandType != null && rightHandType != null) {
+                    this.errorMsg.error(assign.pos, "Incompatible types. Attempting incorrect assignment");
+                }
             }
         }
         else {
@@ -607,7 +613,7 @@ public class Sem4Visitor extends ASTvisitor {
         
         ClassDecl superClass = this.currentClass.superLink;
 
-        MethodDecl methodDecl = methodLookup(methodDeclVoid.name, superClass, methodDeclVoid.pos, "No Super Method Found");
+        MethodDecl methodDecl = methodLookup(methodDeclVoid.name, superClass, -20, "");
         
         if (methodDecl != null) {
             if (methodDecl instanceof MethodDeclVoid) {
@@ -639,13 +645,13 @@ public class Sem4Visitor extends ASTvisitor {
         Type returnExpressionType = methodDeclNonVoid.rtnExp.type;
         Type returnType = methodDeclNonVoid.rtnType;
         
-        if (!matchTypesAssign(returnExpressionType, returnType, -20)) {
+        if (!matchTypesAssign(returnType,returnExpressionType, -20)) {
             this.errorMsg.error(methodDeclNonVoid.pos, "Error: Must return: " + returnType.toString2());
         }
         else {
             ClassDecl superClass = this.currentClass.superLink;
 
-            MethodDecl methodDecl = methodLookup(methodDeclNonVoid.name, superClass, methodDeclNonVoid.pos, "No Super Method Found");
+            MethodDecl methodDecl = methodLookup(methodDeclNonVoid.name, superClass, -20, "");
             
             if (methodDecl instanceof MethodDeclNonVoid) {
                 //check number and type of params

@@ -67,7 +67,7 @@ class Def extends Abc {
 			Lib lib3 = (Lib)abc[4]; // error: indexing of non-array type
 		}
 	}
-	public void test(int n) { // error: signature mismatch with superclass
+	public void test() { // error: signature mismatch with superclass
 	}
 	public int myMethod() {
 		return b; // error: return-exp mismatches with method return type

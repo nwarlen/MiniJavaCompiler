@@ -22,57 +22,57 @@ public class Sem5Visitor extends ASTvisitor {
 		sawBreak = false;
 	}
     
-    public Boolean visitAstNode(AstNode astNode) {
-        return Boolean.FALSE;
-    }
-    
-    public Boolean visitProgram(Program program) {
-        visitClassDeclList(program.classDecls);
-        return Boolean.FALSE;
-    }
-    
-    public Boolean visitClassDecl(ClassDecl classDecl) {
-        for (MethodDecl methodDecl : classDecl.methodTable.values()) {
-            visitMethodDecl(methodDecl);
-        }
-        return Boolean.FALSE;
-    }
-    
-    public Boolean visitBlock(Block block) {
-        return visitStatementList(block.stmts);
-        
-    }
-    
-    public Boolean visitBreak(Break breakStatement) {
-        this.sawBreak = true;
-        return Boolean.TRUE;
-    }
-    
-    //TODO: Read Email and check implementation
-    public Boolean visitStatementList(StatementList statementList) {
-        if (statementList.size() == 0) {
-            return Boolean.FALSE;
-        }
-        
-        for(int i=0; i<statementList.size();i++) {
-            if (i != (statementList.size() - 1)) {
-                //if visiting the statement returns true report error
-                Statement stmt = statementList.get(i);
-                if (visitStatement(stmt).equals(Boolean.TRUE)) {
-                    this.errorMsg.error(stmt.pos, "Error: Unreachable Code Detected");
-                }
-            }
-        }
-        
-        return (Boolean)visitStatement(statementList.get(statementList.size() -1));
-    }
-    
-    public Boolean visitMethodDeclVoid(MethodDeclVoid methodDeclVoid) {
-        this.sawBreak = false;
-        
-        visitStatementList(methodDeclVoid.stmts);
-        
-        return Boolean.FALSE;
-    }
+//    public Boolean visitAstNode(AstNode astNode) {
+//        return Boolean.FALSE;
+//    }
+//
+//    public Boolean visitProgram(Program program) {
+//        visitClassDeclList(program.classDecls);
+//        return Boolean.FALSE;
+//    }
+//
+//    public Boolean visitClassDecl(ClassDecl classDecl) {
+//        for (MethodDecl methodDecl : classDecl.methodTable.values()) {
+//            visitMethodDecl(methodDecl);
+//        }
+//        return Boolean.FALSE;
+//    }
+//
+//    public Boolean visitBlock(Block block) {
+//        return visitStatementList(block.stmts);
+//
+//    }
+//
+//    public Boolean visitBreak(Break breakStatement) {
+//        this.sawBreak = true;
+//        return Boolean.TRUE;
+//    }
+//
+//    //TODO: Read Email and check implementation
+//    public Boolean visitStatementList(StatementList statementList) {
+//        if (statementList.size() == 0) {
+//            return Boolean.FALSE;
+//        }
+//
+//        for(int i=0; i<statementList.size();i++) {
+//            if (i != (statementList.size() - 1)) {
+//                //if visiting the statement returns true report error
+//                Statement stmt = statementList.get(i);
+//                if (visitStatement(stmt).equals(Boolean.TRUE)) {
+//                    this.errorMsg.error(stmt.pos, "Error: Unreachable Code Detected");
+//                }
+//            }
+//        }
+//
+//        return (Boolean)visitStatement(statementList.get(statementList.size() -1));
+//    }
+//
+//    public Boolean visitMethodDeclVoid(MethodDeclVoid methodDeclVoid) {
+//        this.sawBreak = false;
+//
+//        visitStatementList(methodDeclVoid.stmts);
+//
+//        return Boolean.FALSE;
+//    }
 }
 	
