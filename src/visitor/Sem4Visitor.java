@@ -635,6 +635,9 @@ public class Sem4Visitor extends ASTvisitor {
                     }
                 }
             }
+            else {
+                this.errorMsg.error(methodDeclVoid.pos, "Super method w/ mismatching types");
+            }
         }
         return returnObject;
     }
