@@ -51,6 +51,71 @@ public class CG1Visitor extends ASTvisitor {
 		superclassMethodTables = new Stack<Vector<String>>();
 		superclassMethodTables.addElement(new Vector<String>());
 	}
+    
+//    public Object visitProgram(Program program) {
+//        this.code.emit(program, ".data");
+//
+//        ClassDecl cd = program.classDecls.elementAt(0);
+//        ClassDecl superClass = cd.superLink;
+//
+//        while (superClass != null) {
+//            cd = superClass;
+//            superClass = cd.superLink;
+//        }
+//
+//        cd.accept(this);
+//
+//        this.code.flush();
+//        return null;
+//    }
+//
+//    public Object visitClassDecl(ClassDecl classDecl) {
+//        this.currentMethodTable = new Vector<String>(this.superclassMethodTables.peek());
+//
+//        //TODO: currentMethodOffset = 1 + #methods in superClass
+//
+//        int numDataInstVarsInSuperClass;
+//        int numObjInstVarsInSuperClass;
+//
+//        ClassDecl superClass = classDecl.superLink;
+//        if (superClass == null) {
+//            numDataInstVarsInSuperClass = 0;
+//            numObjInstVarsInSuperClass = 0;
+//        }
+//        else {
+//            numDataInstVarsInSuperClass = superClass.numDataInstVars;
+//            numObjInstVarsInSuperClass = superClass.numObjInstVars;
+//        }
+//        this.currentDataInstVarOffset = -16 - 4*(numDataInstVarsInSuperClass);
+//        this.currentObjInstVarOffset = 4 * (numObjInstVarsInSuperClass);
+//
+//        Object rtnObj = super.visitClassDecl(classDecl);
+//
+//        classDecl.numDataInstVars = (-16-this.currentDataInstVarOffset)/4;
+//        classDecl.numObjInstVars = this.currentObjInstVarOffset/4;
+//
+//        this.code.emit(classDecl, "CLASS_" + classDecl.name + ":");
+//        if (superClass == null) {
+//            this.code.emit(classDecl, ".word 0");
+//        }
+//        else {
+//            this.code.emit(classDecl, ".word CLASS_" + superClass.name);
+//        }
+//
+//        for (String meth : this.currentMethodTable) {
+//            this.code.emit(classDecl, ".word " + meth);
+//        }
+//
+//        this.superclassMethodTables.push(this.currentMethodTable);
+//
+//        classDecl.subclasses.accept(this);
+//
+//        this.superclassMethodTables.pop();
+//
+//        this.code.emit(classDecl, "CLASS_END_" + classDecl.name + ":");
+//
+//        return rtnObj;
+//    }
 	
 
 }
