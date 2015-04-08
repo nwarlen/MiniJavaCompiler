@@ -3,7 +3,7 @@ import treedisplay.TreeDisplayable;
 import treedisplay.TreeDrawException;
 import visitor.Visitor;
 
-public class Switch extends Statement {
+public class Switch extends BreakTarget {
   public Exp exp;
   public StatementList stmts;
 

@@ -60,7 +60,7 @@ public class ErrorMsg {
 		LineList p = linePos;
 		while (p!=null) {
 			if (p.head<pos) {
-				return String.valueOf(n) + "." + String.valueOf(pos-p.head);
+				return String.valueOf(n) + "lib" + String.valueOf(pos-p.head);
 			}
 			p=p.tail; n--;
 		}

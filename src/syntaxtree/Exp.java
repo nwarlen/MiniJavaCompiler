@@ -14,13 +14,11 @@ public abstract class Exp extends AstNode {
 	}
 	
 	protected String[]stringsInDescr() {
-		String extra;
 		if (type == null) {
-			extra = "???";
+			return super.stringsInDescr();
 		}
 		else {
-			extra = type.toString2();
+			return strArrayPlus1(super.stringsInDescr(),""+type);
 		}
-		return strArrayPlus1(super.stringsInDescr(),extra);
 	}
 }

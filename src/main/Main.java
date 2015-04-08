@@ -50,10 +50,10 @@ public class Main {
 			this.semanticPhase3(ast, globalTab);
 			this.semanticPhase4(ast, globalTab);
 			this.semanticPhase5(ast, globalTab);
-//			this.cgPhase1(ast, globalTab);
-//			this.cgPhase2(ast);
-//			this.cgPhase3(ast);
-//			this.appendFile();
+			this.cgPhase1(ast, globalTab);
+			this.cgPhase2(ast);
+			this.cgPhase3(ast);
+			this.appendFile();
 			this.printSummaryMessage();
 			this.displayAst(ast);
 			this.closeFiles();
@@ -263,25 +263,25 @@ public class Main {
 			new Sem5Visitor(errorMsg).visit(ast);
 		}
 	}
-//	
-//	public void cgPhase1(AstNode ast, Hashtable<String,ClassDecl> globalTbl) {
-//		if (!errorMsg.anyErrors && ast != null && pass >= 7) {
-//			new CG1Visitor(errorMsg, outputStream).visit(ast);
-//		}
-//	}
-//	
-//	public void cgPhase2(AstNode ast) {
-//		if (!errorMsg.anyErrors && ast != null && pass >= 8) {
-//			new CG2Visitor(errorMsg, outputStream).visit(ast);
-//		}
-//	}
-//	
-//	public void cgPhase3(AstNode ast) {
-//		if (!errorMsg.anyErrors && ast != null && pass >= 9) {
-//			new CG3Visitor(errorMsg, outputStream).visit(ast);
-//		}
-//	}
-//	
+	
+	public void cgPhase1(AstNode ast, Hashtable<String,ClassDecl> globalTbl) {
+		if (!errorMsg.anyErrors && ast != null && pass >= 7) {
+			new CG1Visitor(errorMsg, outputStream).visit(ast);
+		}
+	}
+	
+	public void cgPhase2(AstNode ast) {
+		if (!errorMsg.anyErrors && ast != null && pass >= 8) {
+			new CG2Visitor(errorMsg, outputStream).visit(ast);
+		}
+	}
+	
+	public void cgPhase3(AstNode ast) {
+		if (!errorMsg.anyErrors && ast != null && pass >= 9) {
+			new CG3Visitor(errorMsg, outputStream).visit(ast);
+		}
+	}
+	
 	public void appendFile() {
 		if (!errorMsg.anyErrors && appendStream != null && pass >= 10) {
 			try {
@@ -313,10 +313,10 @@ public class Main {
 	
 	public void printSummaryMessage() {
 		if (errorMsg.anyErrors) {
-			System.err.println("Compilation failed for "+inputFileName+".");
+			System.err.println("Compilation failed for "+inputFileName+ "lib");
 		}
 		else {
-			System.err.println("Compilation successful for "+inputFileName+".");
+			System.err.println("Compilation successful for "+inputFileName+ "lib");
 		}
 	}
 	
