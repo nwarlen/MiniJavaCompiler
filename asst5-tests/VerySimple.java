@@ -2,6 +2,12 @@
 // dispatch is not necessary
 class Main extends Lib {
     public void main() {
-	super.printInt(3);
+	    super.printInt(3);
+        int a = 5;
+        int b = 3;
+        int c = 18;
+        
+        int finalInt = c - b - a;
+        super.printInt(finalInt);
     }
 }

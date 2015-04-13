@@ -6,8 +6,6 @@ import errorMsg.*;
 import java.io.*;
 
 public class CG3Visitor extends ASTvisitor {
-
-
 	// the purpose here is to annotate things with their offsets:
 	// - formal parameters, with respect to the (callee) frame
 	// - local variables, with respect to the frame
@@ -173,16 +171,15 @@ public class CG3Visitor extends ASTvisitor {
             this.code.emit(call, "jal fcn_" + call.methodLink.uniqueId + "_" + call.methName);
         }
         
-        //if void type -> 0
-        //if bool/obj  -> 4
         //if int type  -> 8
-
         if (call.type instanceof IntegerType) {
             currentStackHeight+=8;
         }
+        //if void type -> 0
         else if (call.type instanceof VoidType) {
             //add 0 to current stack height
         }
+        //if bool/obj  -> 4
         else {
             currentStackHeight+=4;
         }
@@ -253,8 +250,8 @@ public class CG3Visitor extends ASTvisitor {
         
         
         //compute amount to pop stack
-//        three words (this>pointer, return address, old this pointer), plus
-//        space for any local variables that were created.
+        //three words (this>pointer, return address, old this pointer), plus
+        //space for any local variables that were created.
         int amountToPop = 12;
         for (VarDecl vd : methodDeclVoid.formals) {
             if (vd.type instanceof IntegerType) {
@@ -267,13 +264,6 @@ public class CG3Visitor extends ASTvisitor {
         
         this.code.emit(methodDeclVoid, "addu $sp, $sp, " + amountToPop);
         this.code.emit(methodDeclVoid, "jr $ra");
-        
-        
         return null;
     }
-    
-    
 }
-
-
-	
