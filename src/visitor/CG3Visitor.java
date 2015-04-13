@@ -37,7 +37,7 @@ public class CG3Visitor extends ASTvisitor {
     
     public Object visitIntegerLiteral(IntegerLiteral integerLiteral) {
         this.code.emit(integerLiteral, "subu $sp, $sp, 8");
-        this.stackHeight-=8;
+        this.stackHeight+=8;
         
         this.code.emit(integerLiteral, "sw $s5, 4($sp)");
         this.code.emit(integerLiteral, "li $t0, " + integerLiteral.val);
@@ -48,7 +48,7 @@ public class CG3Visitor extends ASTvisitor {
 	
     public Object visitNull(Null n) {
         this.code.emit(n, "subu $sp, $sp, 4");
-        this.stackHeight-=4;
+        this.stackHeight +=4;
         
         this.code.emit(n, "sw $zero, ($sp)");
         
@@ -57,7 +57,7 @@ public class CG3Visitor extends ASTvisitor {
     
     public Object visitTrue(True t) {
         this.code.emit(t, "subu $sp, $sp, 4");
-        this.stackHeight-=4;
+        this.stackHeight+=4;
         
         this.code.emit(t, "li $t0, 1");
         this.code.emit(t, "sw $t0, ($sp)");
@@ -67,7 +67,7 @@ public class CG3Visitor extends ASTvisitor {
     
     public Object visitFalse(False f) {
         this.code.emit(f, "subu $sp, $sp, 4");
-        this.stackHeight-=4;
+        this.stackHeight+=4;
         
         this.code.emit(f, "sw $zero, ($sp)");
         
@@ -76,7 +76,7 @@ public class CG3Visitor extends ASTvisitor {
     
     public Object visitStringLiteral(StringLiteral stringLiteral) {
         this.code.emit(stringLiteral, "subu $sp, $sp, 4");
-        this.stackHeight-=4;
+        this.stackHeight+=4;
         
         this.code.emit(stringLiteral, "la $t0, strLit_" + stringLiteral.uniqueCgRep.uniqueId);
         this.code.emit(stringLiteral, "sw $t0, ($sp)");
@@ -86,7 +86,7 @@ public class CG3Visitor extends ASTvisitor {
     
     public Object visitThis(This t) {
         this.code.emit(t, "subu $sp, $sp, 4");
-        this.stackHeight-=4;
+        this.stackHeight+=4;
         
         this.code.emit(t, "sw $s2, ($sp)");
         
@@ -95,7 +95,7 @@ public class CG3Visitor extends ASTvisitor {
 
     public Object visitSuper(Super s) {
         this.code.emit(s, "subu $sp, $sp, 4");
-        this.stackHeight-=4;
+        this.stackHeight+=4;
 
         this.code.emit(s, "sw $s2, ($sp)");
 
@@ -112,7 +112,7 @@ public class CG3Visitor extends ASTvisitor {
         this.code.emit(plus, "addu $t0, $t0, $t1");
         
         this.code.emit(plus, "addu $sp, $sp, 8");
-        this.stackHeight+=8;
+        this.stackHeight-=8;
         
         this.code.emit(plus, "sw $t0, ($sp)");
 
@@ -131,7 +131,7 @@ public class CG3Visitor extends ASTvisitor {
         this.code.emit(minus, "subu $t0, $t1, $t0");
 
         this.code.emit(minus, "addu $sp, $sp, 8");
-        this.stackHeight+=8;
+        this.stackHeight-=8;
 
         this.code.emit(minus, "sw $t0, ($sp)");
 
@@ -151,27 +151,26 @@ public class CG3Visitor extends ASTvisitor {
         
         //TODO: Check this
         this.code.emit(newObject, "subu $sp, $sp, 4");
-        this.stackHeight-=4;
+        this.stackHeight+=4;
         
-        this.code.emit(newObject, "sw $zero, $sp");
+        this.code.emit(newObject, "sw $zero, ($sp)");
         
         return null;
     }
     
+    @SuppressWarnings("StatementWithEmptyBody")
     public Object visitCall(Call call) {
         int currentStackHeight = this.stackHeight;
         
         call.obj.accept(this);
         
-        for(Exp exp : call.parms) {
-            exp.accept(this);
-        }
+        call.parms.accept(this);
         
-        if (call.pos < 0) {
+        if (call.methodLink.pos < 0) {
             this.code.emit(call, "jal " + call.methName);
         }
         else {
-            this.code.emit(call, "jal fcn_" + call.uniqueId + "_" + call.methName);
+            this.code.emit(call, "jal fcn_" + call.methodLink.uniqueId + "_" + call.methName);
         }
         
         //if void type -> 0
@@ -193,7 +192,83 @@ public class CG3Visitor extends ASTvisitor {
     }
     
     public Object visitIdentifierExp(IdentifierExp identifierExp) {
-        //TODO: Implement
+        if (identifierExp.link instanceof LocalVarDecl) {
+            int stackDepth = this.stackHeight + identifierExp.link.offset;
+            this.code.emit(identifierExp, "lw $t0, " + stackDepth + "($sp)");
+            
+            if (identifierExp.type instanceof IntegerType) {
+                this.code.emit(identifierExp, "subu $sp, $sp, 8");
+                this.stackHeight+=8;
+                this.code.emit(identifierExp, "sw $s5, 4($sp)");
+                this.code.emit(identifierExp, "sw $t0, ($sp)");
+            }
+            else {
+                this.code.emit(identifierExp, "subu $sp, $sp, 4");
+                this.stackHeight+=4;
+                this.code.emit(identifierExp, "sw $t0, ($sp)");
+            }
+        }
+        return null;
+    }
+    
+    public Object visitProgram(Program program) {
+        this.code.emit(program, ".text");
+        this.code.emit(program, ".globl main");
+        this.code.emit(program, "main:");
+        this.code.emit(program, "jal vm_init");
+        this.stackHeight = 0;
+        program.mainStatement.accept(this);        
+        this.code.emit(program, "li $v0, 10");
+        this.code.emit(program, "syscall");
+        
+        this.code.emit(program, "CLASS_String:");
+        this.code.emit(program, "CLASS_Object:");
+        
+        program.classDecls.accept(this);
+        
+        //flush code stream
+        this.code.flush();
+        
+        return null;
+    }
+    
+    public Object visitMethodDeclVoid(MethodDeclVoid methodDeclVoid) {
+        this.code.emit(methodDeclVoid, ".globl fcn_" + methodDeclVoid.uniqueId + "_" + methodDeclVoid.name);
+        this.code.emit(methodDeclVoid, "fcn_" + methodDeclVoid.uniqueId + "_" + methodDeclVoid.name + ":");
+        this.code.emit(methodDeclVoid, "subu $sp, $sp, 8");
+        this.code.emit(methodDeclVoid, "sw $ra, 4($sp)");
+        this.code.emit(methodDeclVoid, "sw $s2, ($sp)");
+        
+        this.stackHeight = 4;
+        int stackTopRelative = 4 + methodDeclVoid.thisPtrOffset;
+        this.code.emit(methodDeclVoid, "lw $s2, " + stackTopRelative + "($sp)");
+        
+        methodDeclVoid.stmts.accept(this);
+
+        int offsetSavedReturn = this.stackHeight;
+        int offsetSavedThis = stackHeight - 4;
+        
+        this.code.emit(methodDeclVoid, "lw $ra, " + offsetSavedReturn + "($sp)");
+        this.code.emit(methodDeclVoid, "lw $s2, " + offsetSavedThis + "($sp)");
+        
+        
+        //compute amount to pop stack
+//        three words (this>pointer, return address, old this pointer), plus
+//        space for any local variables that were created.
+        int amountToPop = 12;
+        for (VarDecl vd : methodDeclVoid.formals) {
+            if (vd.type instanceof IntegerType) {
+                amountToPop+=8;
+            }
+            else{
+                amountToPop+=4;
+            }
+        }
+        
+        this.code.emit(methodDeclVoid, "addu $sp, $sp, " + amountToPop);
+        this.code.emit(methodDeclVoid, "jr $ra");
+        
+        
         return null;
     }
     
