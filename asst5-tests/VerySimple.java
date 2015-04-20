@@ -6,6 +6,9 @@ class Main extends Lib {
         int a = 5;
         int b = 3;
         int c = 18;
+
+        String x = "string";
+        super.printStr(x);
         
         int finalInt = c - b - a;
         super.printInt(finalInt);
