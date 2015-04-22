@@ -125,7 +125,6 @@ public class CG3Visitor extends ASTvisitor {
         this.code.emit(minus, "lw $t0, ($sp)");
         this.code.emit(minus, "lw $t1, 8($sp)");
         
-        //TODO: Check this!
         this.code.emit(minus, "subu $t0, $t1, $t0");
 
         this.code.emit(minus, "addu $sp, $sp, 8");
@@ -330,42 +329,81 @@ public class CG3Visitor extends ASTvisitor {
     }
     
     public Object visitInstanceOf(InstanceOf instanceOf) {
-//        ❏ generate code for the subexpression
-//        la $t0,CLASS_Abc
-//        la $t1,CLASS_END_Abc
-//        jal instanceOf
+        instanceOf.exp.accept(this);
+        //TODO: Check this!!!
+        this.code.emit(instanceOf, "la $t0, CLASS_" + instanceOf.checkType.toString2());
+        this.code.emit(instanceOf, "la $t0, CLASS_END_" + instanceOf.checkType.toString2());
+        this.code.emit(instanceOf, "jal instanceOf");
+        return null;
+    }
+
+    public Object visitCast(Cast cast) {
+        cast.exp.accept(this);
+
+        this.code.emit(cast, "la $t0, CLASS_" + cast.castType.toString2());
+        this.code.emit(cast, "la $t1, CLASS_END_" + cast.castType.toString2());
+        this.code.emit(cast, "jal checkCast");
+
         return null;
     }
     
-    //PARTIALLY IMPLEMENT THE FOLLOWING
-    
-    //TODO: Fully implement
     public Object visitNewObject(NewObject newObject) {
-        //You can just push a null pointer(0) onto the stack, as the object is never accessed.
+        int numObjInstVars = newObject.objType.link.numObjInstVars;
+        int numDataInstVars = newObject.objType.link.numDataInstVars + 1;
         
-        //TODO: Check this
-        this.code.emit(newObject, "subu $sp, $sp, 4");
-        this.stackHeight+=4;
+        this.code.emit(newObject, "li $s6, " + numDataInstVars);
+        this.code.emit(newObject, "li $s7, " + numObjInstVars);
+        this.code.emit(newObject, "jal newObject");
+        this.stackHeight -= 4;
+        this.code.emit(newObject, "la $t0, CLASS_" + newObject.objType.link.name);
+        this.code.emit(newObject, "sw $t0,-12($s7)");
         
-        this.code.emit(newObject, "sw $zero, ($sp)");
+        return null;
+    }
+    
+    public Object visitNewArray(NewArray newArray) {
+        newArray.sizeExp.accept(this);
+
+        this.code.emit(newArray, "lw $s7, ($sp)");
+        this.code.emit(newArray, "addu $sp, $sp, 8");
+        this.stackHeight -= 8;
         
+        if (newArray.objType instanceof IntegerType || newArray.objType instanceof BooleanType) {
+            this.code.emit(newArray, "li $s6, -1");
+        }
+        else {
+            this.code.emit(newArray, "li $s6, 0");
+        }
+
+        this.code.emit(newArray, "jal newObject");
+        this.stackHeight -= 4;
+
         return null;
     }
     
     @SuppressWarnings("StatementWithEmptyBody")
-    //TODO: Fully Implement
     public Object visitCall(Call call) {
         int currentStackHeight = this.stackHeight;
-        
         call.obj.accept(this);
-        
         call.parms.accept(this);
         
-        if (call.methodLink.pos < 0) {
-            this.code.emit(call, "jal " + call.methName);
+        if (call.obj instanceof Super) {
+            if (call.methodLink.pos < 0) {
+                this.code.emit(call, "jal " + call.methName);
+            }
+            else {
+                this.code.emit(call, "jal fcn_" + call.methodLink.uniqueId + "_" + call.methName);
+            }
         }
         else {
-            this.code.emit(call, "jal fcn_" + call.methodLink.uniqueId + "_" + call.methName);
+            int mmm = call.methodLink.thisPtrOffset - 4;
+            int nnn = call.methodLink.vtableOffset * 4;
+
+            this.code.emit(call, "lw $t0, " + mmm + "($sp)");
+            this.code.emit(call, "beq $t0, $zero, nullPtrException");
+            this.code.emit(call, "lw $t0, -12($t0)");
+            this.code.emit(call, "lw $t0, " + nnn + "($t0)");
+            this.code.emit(call, "jalr $t0");
         }
         
         //if int type  -> 8
@@ -383,6 +421,43 @@ public class CG3Visitor extends ASTvisitor {
         
         this.stackHeight = currentStackHeight;
         return null;
+    }
+    
+    @SuppressWarnings("StatementWithEmptyBody")
+    public Object visitExpStatement(ExpStatement expStatement) {
+        expStatement.exp.accept(this);
+        
+        if (expStatement.exp.type instanceof IntegerType) {
+            this.code.emit(expStatement, "addu $sp, $sp, 8");
+            this.stackHeight -= 8;
+        }
+        else if (expStatement.exp.type instanceof VoidType) {
+            //do nothing
+        }
+        else {
+            this.code.emit(expStatement, "addu $sp, $sp, 4");
+            this.stackHeight -= 4;
+        }
+        return null;
+    }
+    
+    public Object visitBlock(Block block) {
+        int currStackheight = this.stackHeight;
+        
+        block.stmts.accept(this);
+        
+        if (this.stackHeight != currStackheight) {
+            int diff = this.stackHeight - currStackheight;
+            this.code.emit(block, "addu $sp, $sp, " + diff);
+        }
+
+        this.stackHeight = currStackheight;
+        return null;
+    }
+    
+    public Object visitIf(If ifStmt) {
+        return null;
+        
     }
 
     public Object visitIdentifierExp(IdentifierExp identifierExp) {
