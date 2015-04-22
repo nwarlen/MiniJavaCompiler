@@ -93,7 +93,7 @@ public class CG3Visitor extends ASTvisitor {
 
     public Object visitSuper(Super s) {
         this.code.emit(s, "subu $sp, $sp, 4");
-        this.stackHeight+=4;
+        this.stackHeight += 4;
 
         this.code.emit(s, "sw $s2, ($sp)");
 
@@ -110,7 +110,7 @@ public class CG3Visitor extends ASTvisitor {
         this.code.emit(plus, "addu $t0, $t0, $t1");
         
         this.code.emit(plus, "addu $sp, $sp, 8");
-        this.stackHeight-=8;
+        this.stackHeight -= 8;
         
         this.code.emit(plus, "sw $t0, ($sp)");
 
@@ -136,14 +136,210 @@ public class CG3Visitor extends ASTvisitor {
         return null;
     }
     
+    public Object visitTimes(Times times) {
+        times.left.accept(this);
+        times.right.accept(this);
+        
+        this.code.emit(times, "lw $t0, ($sp)");
+        this.code.emit(times, "lw $t1, 8($sp)");
+        this.code.emit(times, "mult $t0, $t1");
+        this.code.emit(times, "mflo $t0");
+        this.code.emit(times, "addu $sp, $sp, 8");
+        this.stackHeight -= 8;
+        this.code.emit(times, "sw $t0, ($sp)");
+        
+        return null;
+    }
+    
+    public Object visitDivide(Divide divide) {
+        divide.left.accept(this);
+        divide.right.accept(this);
+        
+        this.code.emit(divide, "jal divide");
+        this.stackHeight += 8;
+        
+        return null;
+    }
+    
+    public Object visitRemainder(Remainder remainder) {
+        remainder.left.accept(this);
+        remainder.right.accept(this);
+        
+        this.code.emit(remainder, "jal remainder");
+        this.stackHeight += 8;
+        
+        return null;
+    }
+    
+    public Object visitEquals(Equals equals) {
+        equals.left.accept(this);
+        equals.right.accept(this);
+        
+        if (equals.left.type instanceof IntegerType) {
+            this.code.emit(equals, "lw $t0, ($sp)");
+            this.code.emit(equals, "lw $t1, 8($sp)");
+            
+            this.code.emit(equals, "seq $t0, $t0, $t1");
+            this.code.emit(equals, "addu $sp, $sp, 12");
+            this.stackHeight -= 12;
+            
+            this.code.emit(equals, "sw $t0, ($sp)");
+        }
+        else {
+            this.code.emit(equals, "lw $t0, ($sp)");
+            this.code.emit(equals, "lw $t1, 4($sp)");
+            this.code.emit(equals, "seq $t0, $t0, $t1");
+            this.code.emit(equals, "addu $sp, $sp, 4");
+            this.stackHeight -= 4;
+            
+            this.code.emit(equals, "sw $t0, ($sp)");
+        }
+        
+        return null;
+    }
+    
+    public Object visitGreaterThan(GreaterThan greaterThan) {
+        greaterThan.left.accept(this);
+        greaterThan.right.accept(this);
+
+        this.code.emit(greaterThan, "lw $t0, ($sp)");
+        this.code.emit(greaterThan, "lw $t1, 8($sp)");
+        this.code.emit(greaterThan, "sgt $t0, $t1, $t0");
+        this.code.emit(greaterThan, "addu $sp, $sp, 12");
+        this.stackHeight -= 12;
+        this.code.emit(greaterThan, "sw $t0, ($sp)");
+        
+        return null;
+    }
+
+    public Object visitLessThan(LessThan lessThan) {
+        lessThan.left.accept(this);
+        lessThan.right.accept(this);
+
+        this.code.emit(lessThan, "lw $t0, ($sp)");
+        this.code.emit(lessThan, "lw $t1, 8($sp)");
+        this.code.emit(lessThan, "slt $t0, $t1, $t0");
+        this.code.emit(lessThan, "addu $sp, $sp, 12");
+        this.stackHeight -= 12;
+        this.code.emit(lessThan, "sw $t0, ($sp)");
+
+        return null;
+    }
+    
     public Object visitLocalVarDecl(LocalVarDecl localVarDecl) {
         localVarDecl.initExp.accept(this);
         localVarDecl.offset = -this.stackHeight;
         return null;
     }
+
+    public Object visitNot(Not not) {
+        not.exp.accept(this);
+        
+        this.code.emit(not, "lw $t0, ($sp)");
+        this.code.emit(not, "xor $t0, $t0, 1");
+        this.code.emit(not, "sw $t0, ($sp)");
+        
+        return null;
+    }
+    
+    public Object visitAnd(And and) {
+        and.left.accept(this);
+        this.code.emit(and, "lw $t0, ($sp)");
+        this.code.emit(and, "beq $t0, $zero, skip_" + and.uniqueId);
+        this.code.emit(and, "addu $sp, $sp, 4");
+        this.stackHeight -= 4;
+        and.right.accept(this);
+        this.code.emit(and, "skip_" + and.uniqueId + ":");
+        return null;
+    }
+    
+    public Object visitOr(Or or) {
+        or.left.accept(this);
+        this.code.emit(or, "lw $t0, ($sp)");
+        //TODO: Check This!!!
+        this.code.emit(or, "bne $t0, $zero, skip_" + or.uniqueId);
+        this.code.emit(or, "addu $sp, $sp, 4");
+        this.stackHeight -= 4;
+        or.right.accept(this);
+        this.code.emit(or, "skip_" + or.uniqueId + ":");
+        return null;
+    }
+    
+    public Object visitArrayLength(ArrayLength arrayLength) {
+        arrayLength.exp.accept(this);
+        
+        this.code.emit(arrayLength, "lw $t0, ($sp)");
+        this.code.emit(arrayLength, "beq $t0, $zero, nullPtrException");
+        this.code.emit(arrayLength, "lw $t0, -4($t0)");
+        this.code.emit(arrayLength, "sw $s5, ($sp)");
+        this.code.emit(arrayLength, "subu $sp, $sp, 4");
+        this.stackHeight += 4;
+        this.code.emit(arrayLength, "sw $t0, ($sp)");
+        
+        return null;
+    }
+    
+    public Object visitArrayLookup(ArrayLookup arrayLookup) {
+        arrayLookup.arrExp.accept(this);
+        arrayLookup.idxExp.accept(this);
+        
+        this.code.emit(arrayLookup, "lw $t0, 8($sp)");
+        this.code.emit(arrayLookup, "beq $t0, $zero, nullPtrException");
+        this.code.emit(arrayLookup, "lw $t1, -4($t0)");
+        this.code.emit(arrayLookup, "lw $t2, ($sp)");
+        this.code.emit(arrayLookup, "bgeu $t2, $t1, arrayIndexOutOfBounds");
+        this.code.emit(arrayLookup, "sll $t2, $t2, 2");
+        this.code.emit(arrayLookup, "addu $t2, $t2, $t0");
+        this.code.emit(arrayLookup, "lw $t0, ($t2)");
+
+        //if array contains int
+        if (arrayLookup.arrExp.type instanceof IntegerType) {
+            this.code.emit(arrayLookup, "sw $t0, 4($sp)");
+            this.code.emit(arrayLookup, "sw $s5, 8($sp)");
+            this.code.emit(arrayLookup, "addu $sp, $sp, 4");
+            this.stackHeight -= 4;
+        }
+        else {
+            this.code.emit(arrayLookup, "sw $t0, 8($sp)");
+            this.code.emit(arrayLookup, "addu $sp, $sp, 8");
+            this.stackHeight -= 8;
+        }
+        
+        return null;
+    }
+    
+    public Object visitInstVarAccess(InstVarAccess instVarAccess) {
+        instVarAccess.exp.accept(this);
+        int offset = instVarAccess.varDec.offset;
+        
+        this.code.emit(instVarAccess, "lw $t0, ($sp)");
+        this.code.emit(instVarAccess, "beq $t0, $zero, nullPtrException");
+        this.code.emit(instVarAccess, "lw $t0, " + offset + "($t0)");
+        
+        if (instVarAccess.varDec.type instanceof IntegerType) {
+            this.code.emit(instVarAccess, "subu $sp, $sp, 4");
+            this.code.emit(instVarAccess, "sw $s5, 4($sp)");
+            this.code.emit(instVarAccess, "sw $t0, ($sp)");
+            this.stackHeight += 4;
+        }
+        else {
+            this.code.emit(instVarAccess, "sw $t0, ($sp)");
+        }
+
+        return null;
+    }
+    
+    public Object visitInstanceOf(InstanceOf instanceOf) {
+//        ❏ generate code for the subexpression
+//        la $t0,CLASS_Abc
+//        la $t1,CLASS_END_Abc
+//        jal instanceOf
+        return null;
+    }
     
     //PARTIALLY IMPLEMENT THE FOLLOWING
     
+    //TODO: Fully implement
     public Object visitNewObject(NewObject newObject) {
         //You can just push a null pointer(0) onto the stack, as the object is never accessed.
         
@@ -157,6 +353,7 @@ public class CG3Visitor extends ASTvisitor {
     }
     
     @SuppressWarnings("StatementWithEmptyBody")
+    //TODO: Fully Implement
     public Object visitCall(Call call) {
         int currentStackHeight = this.stackHeight;
         
@@ -187,9 +384,13 @@ public class CG3Visitor extends ASTvisitor {
         this.stackHeight = currentStackHeight;
         return null;
     }
-    
+
     public Object visitIdentifierExp(IdentifierExp identifierExp) {
-        if (identifierExp.link instanceof LocalVarDecl) {
+        if (identifierExp.link instanceof InstVarDecl) {
+            int offset = identifierExp.link.offset;
+            this.code.emit(identifierExp, "lw $t0, " + offset + "($s2)");
+        }
+        else if (identifierExp.link instanceof LocalVarDecl || identifierExp.link instanceof FormalDecl) {
             int stackDepth = this.stackHeight + identifierExp.link.offset;
             this.code.emit(identifierExp, "lw $t0, " + stackDepth + "($sp)");
             
@@ -208,6 +409,7 @@ public class CG3Visitor extends ASTvisitor {
         return null;
     }
     
+    //TODO: Fully implement
     public Object visitProgram(Program program) {
         this.code.emit(program, ".text");
         this.code.emit(program, ".globl main");
@@ -229,6 +431,7 @@ public class CG3Visitor extends ASTvisitor {
         return null;
     }
     
+    //TODO: Fully implement
     public Object visitMethodDeclVoid(MethodDeclVoid methodDeclVoid) {
         this.code.emit(methodDeclVoid, ".globl fcn_" + methodDeclVoid.uniqueId + "_" + methodDeclVoid.name);
         this.code.emit(methodDeclVoid, "fcn_" + methodDeclVoid.uniqueId + "_" + methodDeclVoid.name + ":");

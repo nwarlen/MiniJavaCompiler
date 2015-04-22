@@ -10,6 +10,8 @@ class Main extends Lib {
         String x = "string";
         super.printStr(x);
         
+        int[] myArr = new int[10];
+        
         int finalInt = c - b - a;
         super.printInt(finalInt);
     }

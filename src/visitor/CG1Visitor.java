@@ -170,19 +170,23 @@ public class CG1Visitor extends ASTvisitor {
     
     //HELPER METHODS
     public int numMethods(ClassDecl cd) {
-        ArrayList<String> meths = new ArrayList<String>(cd.methodTable.keySet());
-        
-        ClassDecl superClass = cd.superLink;
-        
-        while (superClass != null) {
-            for (String s : superClass.methodTable.keySet()) {
-                if (!meths.contains(s)) {
-                    meths.add(s);
+        ArrayList<String> meths = new ArrayList<String>();
+        if (cd != null) {
+            meths = new ArrayList<String>(cd.methodTable.keySet());
+
+
+            ClassDecl superClass = cd.superLink;
+
+            while (superClass != null) {
+                for (String s : superClass.methodTable.keySet()) {
+                    if (!meths.contains(s)) {
+                        meths.add(s);
+                    }
                 }
+                superClass = superClass.superLink;
             }
-            superClass = superClass.superLink;
+
         }
-        
         return meths.size();
     }
     
