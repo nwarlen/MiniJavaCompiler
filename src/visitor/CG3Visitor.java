@@ -456,10 +456,88 @@ public class CG3Visitor extends ASTvisitor {
     }
     
     public Object visitIf(If ifStmt) {
-        return null;
+        ifStmt.exp.accept(this);
+        this.code.emit(ifStmt, "lw $t0, ($sp)");
+        this.code.emit(ifStmt, "addu $sp, $sp, 4");
+        this.stackHeight -= 4;
+        this.code.emit(ifStmt, "beq $t0, $zero, if_else_" + ifStmt.uniqueId);
+        ifStmt.trueStmt.accept(this);
+        this.code.emit(ifStmt, "j if_done_" + ifStmt.uniqueId);
+        this.code.emit(ifStmt, "if_else_" + ifStmt.uniqueId + ":");
+        ifStmt.falseStmt.accept(this);
+        this.code.emit(ifStmt, "if_done_" + ifStmt.uniqueId + ":");
         
+        return null;
+    }
+    
+    public Object visitWhile(While w) {
+        w.stackHeight = this.stackHeight;
+        this.code.emit(w, "j while_enter_" + w.uniqueId);
+        this.code.emit(w, "while_top_" + w.uniqueId + ":");
+        w.body.accept(this);
+        this.code.emit(w, "while_enter_" + w.uniqueId + ":");
+        w.exp.accept(this);
+        this.code.emit(w, "lw $t0, ($sp)");
+        this.code.emit(w, "addu $sp, $sp, 4");
+        this.stackHeight -= 4;
+        this.code.emit(w, "bne $t0, $zero, while_top_" + w.uniqueId);
+        this.code.emit(w, "while_exit_" + w.uniqueId);
+
+        return null;
+    }
+    
+    public Object visitBreak(Break b) {
+        int diff = this.stackHeight - b.breakLink.stackHeight;
+        
+        if (diff != 0) {
+            this.code.emit(b, "addu $sp, $sp, " + diff);
+            //TODO: Check This!!!
+            this.code.emit(b, "j while_exit_" + b.breakLink.uniqueId);
+        }
+        
+        return null;
     }
 
+    public Object visitAssign(Assign assign) {
+        if (assign.lhs instanceof IdentifierExp) {
+            this.visitAssignIdentifierExp(assign);
+        }
+        else if (assign.lhs instanceof InstVarAccess) {
+            this.visitAssignInstVarAccess(assign);
+        }
+        else if (assign.lhs instanceof ArrayLookup) {
+            this.visitAssignArrayLookup(assign);
+        }
+        return null;
+    }
+    
+    public void visitAssignIdentifierExp(Assign assign) {
+        assign.rhs.accept(this);
+        this.code.emit(assign, "lw $t0, ($sp)");
+        if (((IdentifierExp)assign.lhs).link instanceof InstVarDecl) {
+            int offset = ((IdentifierExp)assign.lhs).link.offset;
+            this.code.emit(assign, "sw $t0, " + offset + "($s2)");
+        }
+        else {
+            int offset = ((IdentifierExp) assign.lhs).link.offset + this.stackHeight;
+            this.code.emit(assign, "sw $t0, " + offset + "($sp)");
+        }
+        
+        if (((IdentifierExp) assign.lhs).type instanceof IntegerType) {
+            this.code.emit(assign, "addu $sp, $sp, 8");
+            this.stackHeight -= 8;
+        }
+        else {
+            this.code.emit(assign, "addu $sp, $sp, 4");
+            this.stackHeight -= 4;
+        }
+    }
+    
+    public void visitAssignInstVarAccess(Assign assign) {
+        
+        
+    }
+    
     public Object visitIdentifierExp(IdentifierExp identifierExp) {
         if (identifierExp.link instanceof InstVarDecl) {
             int offset = identifierExp.link.offset;
