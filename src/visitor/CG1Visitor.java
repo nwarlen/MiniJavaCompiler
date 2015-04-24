@@ -103,7 +103,9 @@ public class CG1Visitor extends ASTvisitor {
         }
 
         for (String meth : this.currentMethodTable) {
-            this.code.emit(classDecl, ".word " + meth);
+            if (meth != null) {
+                this.code.emit(classDecl, ".word " + meth);
+            }
         }
 
         this.superclassMethodTables.push(this.currentMethodTable);

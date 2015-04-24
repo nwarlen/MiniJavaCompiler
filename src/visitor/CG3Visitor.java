@@ -534,17 +534,72 @@ public class CG3Visitor extends ASTvisitor {
     }
     
     public void visitAssignInstVarAccess(Assign assign) {
+        ((InstVarAccess)assign.lhs).exp.accept(this);
+        assign.rhs.accept(this);
         
+        this.code.emit(assign, "lw $t0, ($sp)");
         
+        int sss = 4;
+        if (assign.lhs.type instanceof IntegerType) {
+            sss = 8;
+        }
+        
+        this.code.emit(assign, "lw $t1, " + sss + "($sp)");
+        
+        this.code.emit(assign, "beq $t1, $zero, nullPtrException");
+        
+        int offset = ((InstVarAccess) assign.lhs).varDec.offset;
+        
+        this.code.emit(assign, "sw $t0, " + offset + "($t1)");
+        
+        if (((InstVarAccess) assign.lhs).exp.type instanceof IntegerType) {
+            this.code.emit(assign, "addu $sp, $sp, 12");
+            this.stackHeight -= 12;
+        }
+        else {
+            this.code.emit(assign, "addu $sp, $sp, 8");
+            this.stackHeight -= 8;
+        }
     }
+    
+    public void visitAssignArrayLookup(Assign assign) {
+        ArrayLookup arrayLookup = ((ArrayLookup)assign.lhs);
+        
+        arrayLookup.arrExp.accept(this);
+        arrayLookup.idxExp.accept(this);
+        assign.rhs.accept(this);
+        
+        this.code.emit(assign, "lw $t0, ($sp)");
+        int amountToAdd = 0;
+        if (assign.rhs.type instanceof IntegerType) {
+            amountToAdd = 4;
+        }
+        int num = 12 + amountToAdd;
+        this.code.emit(assign, "lw $t1, " + num + "($sp)");
+        this.code.emit(assign, "beq $t1, $zero, nullPtrException");
+        num = 4 + amountToAdd;
+        this.code.emit(assign, "lw $t2, " + num + "($sp)");
+        this.code.emit(assign, "lw $t3, -4($t1)");
+        this.code.emit(assign, "bgeu $t2, $t3, arrayIndexOutOfBounds");
+        this.code.emit(assign, "sll $t2, $t2, 2");
+        this.code.emit(assign, "addu $t2, $t2, $t1");
+        this.code.emit(assign, "sw $t0, ($t2)");
+        num = 16 + amountToAdd;
+        this.code.emit(assign, "addu $sp, $sp, " + num);
+        this.stackHeight -= num;
+    }
+    
+    
     
     public Object visitIdentifierExp(IdentifierExp identifierExp) {
         if (identifierExp.link instanceof InstVarDecl) {
             int offset = identifierExp.link.offset;
+            this.code.emit(identifierExp, "#link offset = " + offset);
             this.code.emit(identifierExp, "lw $t0, " + offset + "($s2)");
         }
         else if (identifierExp.link instanceof LocalVarDecl || identifierExp.link instanceof FormalDecl) {
             int stackDepth = this.stackHeight + identifierExp.link.offset;
+            this.code.emit(identifierExp, "#link offset = " + (stackDepth - this.stackHeight));
             this.code.emit(identifierExp, "lw $t0, " + stackDepth + "($sp)");
             
             if (identifierExp.type instanceof IntegerType) {
@@ -561,8 +616,7 @@ public class CG3Visitor extends ASTvisitor {
         }
         return null;
     }
-    
-    //TODO: Fully implement
+
     public Object visitProgram(Program program) {
         this.code.emit(program, ".text");
         this.code.emit(program, ".globl main");
@@ -573,9 +627,6 @@ public class CG3Visitor extends ASTvisitor {
         this.code.emit(program, "li $v0, 10");
         this.code.emit(program, "syscall");
         
-        this.code.emit(program, "CLASS_String:");
-        this.code.emit(program, "CLASS_Object:");
-        
         program.classDecls.accept(this);
         
         //flush code stream
@@ -583,8 +634,7 @@ public class CG3Visitor extends ASTvisitor {
         
         return null;
     }
-    
-    //TODO: Fully implement
+
     public Object visitMethodDeclVoid(MethodDeclVoid methodDeclVoid) {
         this.code.emit(methodDeclVoid, ".globl fcn_" + methodDeclVoid.uniqueId + "_" + methodDeclVoid.name);
         this.code.emit(methodDeclVoid, "fcn_" + methodDeclVoid.uniqueId + "_" + methodDeclVoid.name + ":");
@@ -606,9 +656,9 @@ public class CG3Visitor extends ASTvisitor {
         
         
         //compute amount to pop stack
-        //three words (this>pointer, return address, old this pointer), plus
-        //space for any local variables that were created.
-        int amountToPop = 12;
+        //TODO: CHECK THIS!!!
+        int amountToPop = this.stackHeight + 4 + 4;
+        
         for (VarDecl vd : methodDeclVoid.formals) {
             if (vd.type instanceof IntegerType) {
                 amountToPop+=8;
@@ -620,6 +670,51 @@ public class CG3Visitor extends ASTvisitor {
         
         this.code.emit(methodDeclVoid, "addu $sp, $sp, " + amountToPop);
         this.code.emit(methodDeclVoid, "jr $ra");
+        return null;
+    }
+    
+    public Object visitMethodDeclNonVoid(MethodDeclNonVoid methodDeclNonVoid) {
+        this.code.emit(methodDeclNonVoid, ".globl fcn_" + methodDeclNonVoid.uniqueId + "_" + methodDeclNonVoid.name);
+        this.code.emit(methodDeclNonVoid, "fcn_" + methodDeclNonVoid.uniqueId + "_" + methodDeclNonVoid.name + ":");
+        this.code.emit(methodDeclNonVoid, "subu $sp, $sp, 8");
+        this.code.emit(methodDeclNonVoid, "sw $ra, 4($sp)");
+        this.code.emit(methodDeclNonVoid, "sw $s2, ($sp)");
+        this.stackHeight = 4;
+        
+        int stackTopRelative = 4 + methodDeclNonVoid.thisPtrOffset;
+        this.code.emit(methodDeclNonVoid, "lw $s2, " + stackTopRelative + "($sp)");
+        
+        methodDeclNonVoid.stmts.accept(this);
+        methodDeclNonVoid.rtnExp.accept(this);
+        
+        int savedReturnAddress = this.stackHeight;
+        int savedThisPtr = this.stackHeight - 4;
+
+        this.code.emit(methodDeclNonVoid, "lw $ra, " + savedReturnAddress + "($sp)");
+        this.code.emit(methodDeclNonVoid, "lw $s2, " + savedThisPtr + "($sp)");
+        
+        int formalsSpace =0;
+        for (VarDecl vd : methodDeclNonVoid.formals) {
+            if (vd.type instanceof IntegerType) {
+                formalsSpace+=8;
+            }
+            else{
+                formalsSpace+=4;
+            }
+        }
+        
+        this.code.emit(methodDeclNonVoid, "lw $t0, ($sp)");
+        this.code.emit(methodDeclNonVoid, "sw $t0, " + (stackHeight+formalsSpace) + "($sp)");
+        int rtnValSpace = 4;
+        if (methodDeclNonVoid.rtnType instanceof IntegerType) {
+            this.code.emit(methodDeclNonVoid, "sw $s5, " + (stackHeight+formalsSpace+4) + "($sp)");
+            rtnValSpace = 8;
+        }
+
+        int amountToPop = this.stackHeight + 4 + formalsSpace + 4 - rtnValSpace;
+        this.code.emit(methodDeclNonVoid, "addu $sp, $sp, " + amountToPop);
+        this.code.emit(methodDeclNonVoid, "jr $ra");
+
         return null;
     }
 }

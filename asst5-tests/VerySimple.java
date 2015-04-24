@@ -14,5 +14,11 @@ class Main extends Lib {
         
         int finalInt = c - b - a;
         super.printInt(finalInt);
+        
+        int xyzx = test(1,2,3);
+    }
+    
+    public int test(int a, int b, int c) {
+        return a * b * c;
     }
 }
