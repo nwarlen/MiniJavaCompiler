@@ -228,6 +228,7 @@ public class CG3Visitor extends ASTvisitor {
     public Object visitLocalVarDecl(LocalVarDecl localVarDecl) {
         localVarDecl.initExp.accept(this);
         localVarDecl.offset = -this.stackHeight;
+        this.code.emit(localVarDecl, "lw $zero, ($sp)");
         return null;
     }
 
@@ -350,14 +351,14 @@ public class CG3Visitor extends ASTvisitor {
     public Object visitNewObject(NewObject newObject) {
         int numObjInstVars = newObject.objType.link.numObjInstVars;
         int numDataInstVars = newObject.objType.link.numDataInstVars + 1;
-        
+
         this.code.emit(newObject, "li $s6, " + numDataInstVars);
         this.code.emit(newObject, "li $s7, " + numObjInstVars);
         this.code.emit(newObject, "jal newObject");
-        this.stackHeight -= 4;
+        this.stackHeight += 4;
         this.code.emit(newObject, "la $t0, CLASS_" + newObject.objType.link.name);
         this.code.emit(newObject, "sw $t0,-12($s7)");
-        
+
         return null;
     }
     
@@ -376,7 +377,7 @@ public class CG3Visitor extends ASTvisitor {
         }
 
         this.code.emit(newArray, "jal newObject");
-        this.stackHeight -= 4;
+        this.stackHeight += 4;
 
         return null;
     }
@@ -390,8 +391,7 @@ public class CG3Visitor extends ASTvisitor {
         if (call.obj instanceof Super) {
             if (call.methodLink.pos < 0) {
                 this.code.emit(call, "jal " + call.methName);
-            }
-            else {
+            } else {
                 this.code.emit(call, "jal fcn_" + call.methodLink.uniqueId + "_" + call.methName);
             }
         }
@@ -481,7 +481,7 @@ public class CG3Visitor extends ASTvisitor {
         this.code.emit(w, "addu $sp, $sp, 4");
         this.stackHeight -= 4;
         this.code.emit(w, "bne $t0, $zero, while_top_" + w.uniqueId);
-        this.code.emit(w, "while_exit_" + w.uniqueId);
+        this.code.emit(w, "while_exit_" + w.uniqueId + ":");
 
         return null;
     }
@@ -499,6 +499,7 @@ public class CG3Visitor extends ASTvisitor {
     }
 
     public Object visitAssign(Assign assign) {
+
         if (assign.lhs instanceof IdentifierExp) {
             this.visitAssignIdentifierExp(assign);
         }
@@ -510,7 +511,7 @@ public class CG3Visitor extends ASTvisitor {
         }
         return null;
     }
-    
+
     public void visitAssignIdentifierExp(Assign assign) {
         assign.rhs.accept(this);
         this.code.emit(assign, "lw $t0, ($sp)");
@@ -522,7 +523,7 @@ public class CG3Visitor extends ASTvisitor {
             int offset = ((IdentifierExp) assign.lhs).link.offset + this.stackHeight;
             this.code.emit(assign, "sw $t0, " + offset + "($sp)");
         }
-        
+
         if (((IdentifierExp) assign.lhs).type instanceof IntegerType) {
             this.code.emit(assign, "addu $sp, $sp, 8");
             this.stackHeight -= 8;
@@ -532,26 +533,26 @@ public class CG3Visitor extends ASTvisitor {
             this.stackHeight -= 4;
         }
     }
-    
+
     public void visitAssignInstVarAccess(Assign assign) {
         ((InstVarAccess)assign.lhs).exp.accept(this);
         assign.rhs.accept(this);
-        
+
         this.code.emit(assign, "lw $t0, ($sp)");
-        
+
         int sss = 4;
         if (assign.lhs.type instanceof IntegerType) {
             sss = 8;
         }
-        
+
         this.code.emit(assign, "lw $t1, " + sss + "($sp)");
-        
+
         this.code.emit(assign, "beq $t1, $zero, nullPtrException");
-        
+
         int offset = ((InstVarAccess) assign.lhs).varDec.offset;
-        
+
         this.code.emit(assign, "sw $t0, " + offset + "($t1)");
-        
+
         if (((InstVarAccess) assign.lhs).exp.type instanceof IntegerType) {
             this.code.emit(assign, "addu $sp, $sp, 12");
             this.stackHeight -= 12;
@@ -561,14 +562,14 @@ public class CG3Visitor extends ASTvisitor {
             this.stackHeight -= 8;
         }
     }
-    
+
     public void visitAssignArrayLookup(Assign assign) {
         ArrayLookup arrayLookup = ((ArrayLookup)assign.lhs);
-        
+
         arrayLookup.arrExp.accept(this);
         arrayLookup.idxExp.accept(this);
         assign.rhs.accept(this);
-        
+
         this.code.emit(assign, "lw $t0, ($sp)");
         int amountToAdd = 0;
         if (assign.rhs.type instanceof IntegerType) {
@@ -594,26 +595,25 @@ public class CG3Visitor extends ASTvisitor {
     public Object visitIdentifierExp(IdentifierExp identifierExp) {
         if (identifierExp.link instanceof InstVarDecl) {
             int offset = identifierExp.link.offset;
-            this.code.emit(identifierExp, "#link offset = " + offset);
             this.code.emit(identifierExp, "lw $t0, " + offset + "($s2)");
         }
-        else if (identifierExp.link instanceof LocalVarDecl || identifierExp.link instanceof FormalDecl) {
+        else {
             int stackDepth = this.stackHeight + identifierExp.link.offset;
-            this.code.emit(identifierExp, "#link offset = " + (stackDepth - this.stackHeight));
             this.code.emit(identifierExp, "lw $t0, " + stackDepth + "($sp)");
-            
-            if (identifierExp.type instanceof IntegerType) {
-                this.code.emit(identifierExp, "subu $sp, $sp, 8");
-                this.stackHeight+=8;
-                this.code.emit(identifierExp, "sw $s5, 4($sp)");
-                this.code.emit(identifierExp, "sw $t0, ($sp)");
-            }
-            else {
-                this.code.emit(identifierExp, "subu $sp, $sp, 4");
-                this.stackHeight+=4;
-                this.code.emit(identifierExp, "sw $t0, ($sp)");
-            }
         }
+
+        if (identifierExp.type instanceof IntegerType) {
+            this.code.emit(identifierExp, "subu $sp, $sp, 8");
+            this.stackHeight+=8;
+            this.code.emit(identifierExp, "sw $s5, 4($sp)");
+            this.code.emit(identifierExp, "sw $t0, ($sp)");
+        }
+        else {
+            this.code.emit(identifierExp, "subu $sp, $sp, 4");
+            this.stackHeight+=4;
+            this.code.emit(identifierExp, "sw $t0, ($sp)");
+        }
+        
         return null;
     }
 

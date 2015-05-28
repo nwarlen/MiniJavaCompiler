@@ -1,242 +1,447 @@
-.data # class syntaxtree.Program at 3lib1	
-CLASS_Object: # class syntaxtree.ClassDecl at 0.0   
-.word 0 # class syntaxtree.ClassDecl at 0.0	  
-CLASS_Lib: # class syntaxtree.ClassDecl at 0.0			
-.word CLASS_Object # class syntaxtree.ClassDecl at 0.0   
-#METHODS IN TABLE: null. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0	  
-#METHODS IN TABLE: readLine. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0	
+.data # class syntaxtree.Program at 7lib1 	 
+CLASS_Object: # class syntaxtree.ClassDecl at 0.0 		
+.word 0 # class syntaxtree.ClassDecl at 0.0			
+CLASS_Lib: # class syntaxtree.ClassDecl at 0.0 
+.word CLASS_Object # class syntaxtree.ClassDecl at 0.0		
+#METHODS IN TABLE: null. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0 		
+#METHODS IN TABLE: readLine. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0		 
 #METHODS IN TABLE: readInt. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0	 
-#METHODS IN TABLE: readChar. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0	 	
-#METHODS IN TABLE: printStr. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0 
+#METHODS IN TABLE: readChar. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0 	 
+#METHODS IN TABLE: printStr. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0 	
 #METHODS IN TABLE: printBool. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0		
-#METHODS IN TABLE: printInt. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0 		
-#METHODS IN TABLE: intToString. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0 
-#METHODS IN TABLE: intToChar. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0		 
-.word readLine # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0 
-.word readInt # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0  
-.word readChar # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0	
+#METHODS IN TABLE: printInt. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0		
+#METHODS IN TABLE: intToString. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0	
+#METHODS IN TABLE: intToChar. IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0	 
+.word readLine # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0 	 
+.word readInt # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0	 
+.word readChar # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0 	
 .word printStr # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0			
-.word printBool # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0	 	
-.word printInt # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0	 
-.word intToString # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0  	
-.word intToChar # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0 
-CLASS_Main: # class syntaxtree.ClassDecl at 3lib7	 
-.word CLASS_Lib # class syntaxtree.ClassDecl at 3lib7	
-#METHODS IN TABLE: null. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7   
-#METHODS IN TABLE: readLine. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7  
-#METHODS IN TABLE: readInt. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7 
-#METHODS IN TABLE: readChar. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7		 
-#METHODS IN TABLE: printStr. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7 
-#METHODS IN TABLE: printBool. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7	 
-#METHODS IN TABLE: printInt. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7  	
-#METHODS IN TABLE: intToString. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7 
-#METHODS IN TABLE: intToChar. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7 
-#METHODS IN TABLE: fcn_45_main. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7	
-#METHODS IN TABLE: fcn_58_test. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7	 
-.word readLine # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7		
-.word readInt # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7   
-.word readChar # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7   
-.word printStr # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7	 	
-.word printBool # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7 
-.word printInt # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7			
-.word intToString # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7 		
-.word intToChar # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7	
-.word fcn_45_main # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7 		
-.word fcn_58_test # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 3lib7		
-CLASS_END_Main: # class syntaxtree.ClassDecl at 3lib7		
-CLASS_END_Lib: # class syntaxtree.ClassDecl at 0.0		
-CLASS_String: # class syntaxtree.ClassDecl at 0.0   
+.word printBool # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0   
+.word printInt # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0	
+.word intToString # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0	 	
+.word intToChar # IN CLASSDECL: Lib # class syntaxtree.ClassDecl at 0.0	 
+CLASS_Main: # class syntaxtree.ClassDecl at 7lib7 
+.word CLASS_Lib # class syntaxtree.ClassDecl at 7lib7		
+#METHODS IN TABLE: null. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7	 
+#METHODS IN TABLE: readLine. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7 	 
+#METHODS IN TABLE: readInt. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7 		
+#METHODS IN TABLE: readChar. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7 	
+#METHODS IN TABLE: printStr. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7	 	
+#METHODS IN TABLE: printBool. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7 	
+#METHODS IN TABLE: printInt. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7 		
+#METHODS IN TABLE: intToString. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7	  
+#METHODS IN TABLE: intToChar. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7		 
+#METHODS IN TABLE: fcn_193_main. IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7   
+.word readLine # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7 
+.word readInt # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7  	
+.word readChar # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7   
+.word printStr # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7		
+.word printBool # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7		
+.word printInt # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7   
+.word intToString # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7 	
+.word intToChar # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7 	
+.word fcn_193_main # IN CLASSDECL: Main # class syntaxtree.ClassDecl at 7lib7		 
+CLASS_END_Main: # class syntaxtree.ClassDecl at 7lib7			
+CLASS_END_Lib: # class syntaxtree.ClassDecl at 0.0 
+CLASS_String: # class syntaxtree.ClassDecl at 0.0	  
 .word CLASS_Object # class syntaxtree.ClassDecl at 0.0			
-#METHODS IN TABLE: null. IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0		 
-#METHODS IN TABLE: concat. IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0			
-#METHODS IN TABLE: substring. IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0	
-#METHODS IN TABLE: length. IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0		
-#METHODS IN TABLE: charAt. IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0 	 
-#METHODS IN TABLE: compareTo. IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0  	
-.word concat # IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0	  
+#METHODS IN TABLE: null. IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0 
+#METHODS IN TABLE: concat. IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0 	 
+#METHODS IN TABLE: substring. IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0  	
+#METHODS IN TABLE: length. IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0  	
+#METHODS IN TABLE: charAt. IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0  
+#METHODS IN TABLE: compareTo. IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0		
+.word concat # IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0   
 .word substring # IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0 	
-.word length # IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0	
-.word charAt # IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0 		
-.word compareTo # IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0  	
-CLASS_END_String: # class syntaxtree.ClassDecl at 0.0   
-CLASS_RunMain: # class syntaxtree.ClassDecl at 0.0	
-.word CLASS_Object # class syntaxtree.ClassDecl at 0.0	 
-CLASS_END_RunMain: # class syntaxtree.ClassDecl at 0.0	  
-CLASS_END_Object: # class syntaxtree.ClassDecl at 0.0  
- .data # class syntaxtree.Program at 3lib1  
-  .byte 115 # class syntaxtree.StringLiteral at 10lib20 		
-  .byte 116 # class syntaxtree.StringLiteral at 10lib20 	 
-  .byte 114 # class syntaxtree.StringLiteral at 10lib20 		
-  .byte 105 # class syntaxtree.StringLiteral at 10lib20		
-  .byte 110 # class syntaxtree.StringLiteral at 10lib20	 
-  .byte 103 # class syntaxtree.StringLiteral at 10lib20		
-  .byte 0 # class syntaxtree.StringLiteral at 10lib20  
-  .byte 0 # class syntaxtree.StringLiteral at 10lib20	
-  .word CLASS_String # class syntaxtree.StringLiteral at 10lib20	
-  .word 3 # class syntaxtree.StringLiteral at 10lib20  	
-  .word -6 # class syntaxtree.StringLiteral at 10lib20	  
-strLit_14: # class syntaxtree.StringLiteral at 10lib20 
-.text # class syntaxtree.Program at 3lib1 		
-.globl main # class syntaxtree.Program at 3lib1	 	
-main: # class syntaxtree.Program at 3lib1	 	
-jal vm_init # class syntaxtree.Program at 3lib1  
-li $s6, 1 # class syntaxtree.NewObject at 0.0			
-li $s7, 0 # class syntaxtree.NewObject at 0.0 		
-jal newObject # class syntaxtree.NewObject at 0.0		 
-la $t0, CLASS_Main # class syntaxtree.NewObject at 0.0   
-sw $t0,-12($s7) # class syntaxtree.NewObject at 0.0		 
-lw $t0, 0($sp) # class syntaxtree.Call at 0.0 		
-beq $t0, $zero, nullPtrException # class syntaxtree.Call at 0.0	 
-lw $t0, -12($t0) # class syntaxtree.Call at 0.0	 
-lw $t0, 36($t0) # class syntaxtree.Call at 0.0	  
-jalr $t0 # class syntaxtree.Call at 0.0	  
-li $v0, 10 # class syntaxtree.Program at 3lib1			
-syscall # class syntaxtree.Program at 3lib1			
-.globl fcn_45_main # class syntaxtree.MethodDeclVoid at 4lib17	 
-fcn_45_main: # class syntaxtree.MethodDeclVoid at 4lib17 	 
-subu $sp, $sp, 8 # class syntaxtree.MethodDeclVoid at 4lib17  	
-sw $ra, 4($sp) # class syntaxtree.MethodDeclVoid at 4lib17		
-sw $s2, ($sp) # class syntaxtree.MethodDeclVoid at 4lib17	  
-lw $s2, 8($sp) # class syntaxtree.MethodDeclVoid at 4lib17	 	
-subu $sp, $sp, 4 # class syntaxtree.Super at 5lib12			
-sw $s2, ($sp) # class syntaxtree.Super at 5lib12 		
-subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 5lib21	 
-sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 5lib21 		
-li $t0, 3 # class syntaxtree.IntegerLiteral at 5lib21			
-sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 5lib21  	
-jal printInt # class syntaxtree.Call at 5lib12  	
-subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 6lib17			
-sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 6lib17		 
-li $t0, 5 # class syntaxtree.IntegerLiteral at 6lib17  	
-sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 6lib17	 	
-#Setting offset of: a to: -12 # class syntaxtree.LocalVarDecl at 6lib13  	
-lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 6lib13 	
-subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 7lib17			
-sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 7lib17 	 
-li $t0, 3 # class syntaxtree.IntegerLiteral at 7lib17	  
-sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 7lib17   
-#Setting offset of: b to: -20 # class syntaxtree.LocalVarDecl at 7lib13 		
-lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 7lib13 		
-subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 8lib17 	
-sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 8lib17		 
-li $t0, 18 # class syntaxtree.IntegerLiteral at 8lib17 		
-sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 8lib17	 
-#Setting offset of: c to: -28 # class syntaxtree.LocalVarDecl at 8lib13		 
-lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 8lib13 
-subu $sp, $sp, 4 # class syntaxtree.StringLiteral at 10lib20		 
-la $t0, strLit_14 # class syntaxtree.StringLiteral at 10lib20	
-sw $t0, ($sp) # class syntaxtree.StringLiteral at 10lib20   
-#Setting offset of: x to: -32 # class syntaxtree.LocalVarDecl at 10lib16			
-lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 10lib16	 	
-subu $sp, $sp, 4 # class syntaxtree.Super at 11lib15	  
-sw $s2, ($sp) # class syntaxtree.Super at 11lib15		 
-lw $t0, 4($sp) # class syntaxtree.IdentifierExp at 11lib24  	
-subu $sp, $sp, 4 # class syntaxtree.IdentifierExp at 11lib24			
-sw $t0, ($sp) # class syntaxtree.IdentifierExp at 11lib24  	
-jal printStr # class syntaxtree.Call at 11lib15 	
-subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 13lib31	  
-sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 13lib31  
-li $t0, 10 # class syntaxtree.IntegerLiteral at 13lib31	 	
-sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 13lib31 		
-lw $s7, ($sp) # class syntaxtree.NewArray at 13lib23			
-addu $sp, $sp, 8 # class syntaxtree.NewArray at 13lib23	
-li $s6, 0 # class syntaxtree.NewArray at 13lib23  	
-jal newObject # class syntaxtree.NewArray at 13lib23  	
-#Setting offset of: myArr to: -36 # class syntaxtree.LocalVarDecl at 13lib15   
-lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 13lib15	 
-lw $t0, 8($sp) # class syntaxtree.IdentifierExp at 15lib24			
-subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 15lib24		 
-sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 15lib24	 	
-sw $t0, ($sp) # class syntaxtree.IdentifierExp at 15lib24	 	
-lw $t0, 24($sp) # class syntaxtree.IdentifierExp at 15lib28 
-subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 15lib28 	
-sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 15lib28  	
-sw $t0, ($sp) # class syntaxtree.IdentifierExp at 15lib28   
-lw $t0, ($sp) # class syntaxtree.Minus at 15lib26  
-lw $t1, 8($sp) # class syntaxtree.Minus at 15lib26	
-subu $t0, $t1, $t0 # class syntaxtree.Minus at 15lib26 	 
-addu $sp, $sp, 8 # class syntaxtree.Minus at 15lib26 
-sw $t0, ($sp) # class syntaxtree.Minus at 15lib26	 
-lw $t0, 32($sp) # class syntaxtree.IdentifierExp at 15lib32  	
-subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 15lib32	 
-sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 15lib32	 
-sw $t0, ($sp) # class syntaxtree.IdentifierExp at 15lib32   
-lw $t0, ($sp) # class syntaxtree.Minus at 15lib30	 
-lw $t1, 8($sp) # class syntaxtree.Minus at 15lib30 	
-subu $t0, $t1, $t0 # class syntaxtree.Minus at 15lib30	  
-addu $sp, $sp, 8 # class syntaxtree.Minus at 15lib30 		
-sw $t0, ($sp) # class syntaxtree.Minus at 15lib30  
-#Setting offset of: finalInt to: -44 # class syntaxtree.LocalVarDecl at 15lib13  
-lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 15lib13  	
-subu $sp, $sp, 4 # class syntaxtree.Super at 16lib15	 
-sw $s2, ($sp) # class syntaxtree.Super at 16lib15  
-lw $t0, 4($sp) # class syntaxtree.IdentifierExp at 16lib24 		
-subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 16lib24		
-sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 16lib24  
-sw $t0, ($sp) # class syntaxtree.IdentifierExp at 16lib24   
-jal printInt # class syntaxtree.Call at 16lib15			
-subu $sp, $sp, 4 # class syntaxtree.This at 18lib20  
-sw $s2, ($sp) # class syntaxtree.This at 18lib20	 	
-subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 18lib25	
-sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 18lib25 	
-li $t0, 1 # class syntaxtree.IntegerLiteral at 18lib25		 
-sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 18lib25	  
-subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 18lib27		
-sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 18lib27 	 
-li $t0, 2 # class syntaxtree.IntegerLiteral at 18lib27 
-sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 18lib27   
-subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 18lib29	 
-sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 18lib29  
-li $t0, 3 # class syntaxtree.IntegerLiteral at 18lib29		
-sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 18lib29 	
-lw $t0, 24($sp) # class syntaxtree.Call at 18lib20 		
-beq $t0, $zero, nullPtrException # class syntaxtree.Call at 18lib20	
-lw $t0, -12($t0) # class syntaxtree.Call at 18lib20	 	
-lw $t0, 40($t0) # class syntaxtree.Call at 18lib20			
-jalr $t0 # class syntaxtree.Call at 18lib20		
-#Setting offset of: xyzx to: -52 # class syntaxtree.LocalVarDecl at 18lib13	  
-lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 18lib13 
-lw $ra, 52($sp) # class syntaxtree.MethodDeclVoid at 4lib17 	
-lw $s2, 48($sp) # class syntaxtree.MethodDeclVoid at 4lib17	 	
-addu $sp, $sp, 60 # class syntaxtree.MethodDeclVoid at 4lib17 	 
-jr $ra # class syntaxtree.MethodDeclVoid at 4lib17			
-.globl fcn_58_test # class syntaxtree.MethodDeclNonVoid at 21lib16		 
-fcn_58_test: # class syntaxtree.MethodDeclNonVoid at 21lib16  	
-subu $sp, $sp, 8 # class syntaxtree.MethodDeclNonVoid at 21lib16	 	
-sw $ra, 4($sp) # class syntaxtree.MethodDeclNonVoid at 21lib16	 
-sw $s2, ($sp) # class syntaxtree.MethodDeclNonVoid at 21lib16	 	
-lw $s2, 32($sp) # class syntaxtree.MethodDeclNonVoid at 21lib16  	
-lw $t0, 24($sp) # class syntaxtree.IdentifierExp at 22lib16		 
-subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 22lib16	 
-sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 22lib16 	
-sw $t0, ($sp) # class syntaxtree.IdentifierExp at 22lib16  
-lw $t0, 24($sp) # class syntaxtree.IdentifierExp at 22lib20  	
-subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 22lib20  
-sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 22lib20	
-sw $t0, ($sp) # class syntaxtree.IdentifierExp at 22lib20			
-lw $t0, ($sp) # class syntaxtree.Times at 22lib18 	 
-lw $t1, 8($sp) # class syntaxtree.Times at 22lib18	 	
-mult $t0, $t1 # class syntaxtree.Times at 22lib18		
-mflo $t0 # class syntaxtree.Times at 22lib18 	
-addu $sp, $sp, 8 # class syntaxtree.Times at 22lib18	 
-sw $t0, ($sp) # class syntaxtree.Times at 22lib18   
-lw $t0, 16($sp) # class syntaxtree.IdentifierExp at 22lib24		
-subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 22lib24 	
-sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 22lib24   
-sw $t0, ($sp) # class syntaxtree.IdentifierExp at 22lib24 	 
-lw $t0, ($sp) # class syntaxtree.Times at 22lib22			
-lw $t1, 8($sp) # class syntaxtree.Times at 22lib22  	
-mult $t0, $t1 # class syntaxtree.Times at 22lib22 	 
-mflo $t0 # class syntaxtree.Times at 22lib22		 
-addu $sp, $sp, 8 # class syntaxtree.Times at 22lib22   
-sw $t0, ($sp) # class syntaxtree.Times at 22lib22	
-lw $ra, 12($sp) # class syntaxtree.MethodDeclNonVoid at 21lib16  	
-lw $s2, 8($sp) # class syntaxtree.MethodDeclNonVoid at 21lib16 	
-lw $t0, ($sp) # class syntaxtree.MethodDeclNonVoid at 21lib16 
-sw $t0, 36($sp) # class syntaxtree.MethodDeclNonVoid at 21lib16 	 
-sw $s5, 40($sp) # class syntaxtree.MethodDeclNonVoid at 21lib16 		
-addu $sp, $sp, 36 # class syntaxtree.MethodDeclNonVoid at 21lib16	  
-jr $ra # class syntaxtree.MethodDeclNonVoid at 21lib16 
+.word length # IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0			
+.word charAt # IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0		 
+.word compareTo # IN CLASSDECL: String # class syntaxtree.ClassDecl at 0.0 		
+CLASS_END_String: # class syntaxtree.ClassDecl at 0.0  
+CLASS_RunMain: # class syntaxtree.ClassDecl at 0.0		
+.word CLASS_Object # class syntaxtree.ClassDecl at 0.0		 
+CLASS_END_RunMain: # class syntaxtree.ClassDecl at 0.0  
+CLASS_END_Object: # class syntaxtree.ClassDecl at 0.0 
+ .data # class syntaxtree.Program at 7lib1		 
+  .byte 10 # class syntaxtree.StringLiteral at 43lib11		
+  .byte 0 # class syntaxtree.StringLiteral at 43lib11	
+  .byte 0 # class syntaxtree.StringLiteral at 43lib11  
+  .byte 0 # class syntaxtree.StringLiteral at 43lib11		 
+  .word CLASS_String # class syntaxtree.StringLiteral at 43lib11  
+  .word 2 # class syntaxtree.StringLiteral at 43lib11		
+  .word -1 # class syntaxtree.StringLiteral at 43lib11 
+strLit_189: # class syntaxtree.StringLiteral at 43lib11  	
+.text # class syntaxtree.Program at 7lib1  
+.globl main # class syntaxtree.Program at 7lib1	  
+main: # class syntaxtree.Program at 7lib1  	
+jal vm_init # class syntaxtree.Program at 7lib1   
+li $s6, 1 # class syntaxtree.NewObject at 0.0	 	
+li $s7, 0 # class syntaxtree.NewObject at 0.0		
+jal newObject # class syntaxtree.NewObject at 0.0	 
+la $t0, CLASS_Main # class syntaxtree.NewObject at 0.0 		
+sw $t0,-12($s7) # class syntaxtree.NewObject at 0.0	  
+lw $t0, 0($sp) # class syntaxtree.Call at 0.0	 
+beq $t0, $zero, nullPtrException # class syntaxtree.Call at 0.0 		
+lw $t0, -12($t0) # class syntaxtree.Call at 0.0			
+lw $t0, 36($t0) # class syntaxtree.Call at 0.0			
+jalr $t0 # class syntaxtree.Call at 0.0	
+li $v0, 10 # class syntaxtree.Program at 7lib1 
+syscall # class syntaxtree.Program at 7lib1 		
+.globl fcn_193_main # class syntaxtree.MethodDeclVoid at 10lib17 	
+fcn_193_main: # class syntaxtree.MethodDeclVoid at 10lib17 		
+subu $sp, $sp, 8 # class syntaxtree.MethodDeclVoid at 10lib17 	 
+sw $ra, 4($sp) # class syntaxtree.MethodDeclVoid at 10lib17 	 
+sw $s2, ($sp) # class syntaxtree.MethodDeclVoid at 10lib17 	
+lw $s2, 8($sp) # class syntaxtree.MethodDeclVoid at 10lib17 	 
+subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 13lib29		 
+sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 13lib29 		
+li $t0, 20 # class syntaxtree.IntegerLiteral at 13lib29   
+sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 13lib29   
+lw $s7, ($sp) # class syntaxtree.NewArray at 13lib21		
+addu $sp, $sp, 8 # class syntaxtree.NewArray at 13lib21	 	
+li $s6, 0 # class syntaxtree.NewArray at 13lib21	
+jal newObject # class syntaxtree.NewArray at 13lib21	
+lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 13lib10	 	
+subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 14lib15		
+sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 14lib15   
+li $t0, 0 # class syntaxtree.IntegerLiteral at 14lib15  	
+sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 14lib15  	
+lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 14lib11 	 
+j while_enter_31 # class syntaxtree.While at 14lib2		 
+while_top_31: # class syntaxtree.While at 14lib2 	
+while_enter_31: # class syntaxtree.While at 14lib2		 
+lw $t0, 0($sp) # class syntaxtree.IdentifierExp at 14lib18 		
+subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 14lib18 
+sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 14lib18		
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 14lib18	
+lw $t0, 16($sp) # class syntaxtree.IdentifierExp at 14lib22		 
+subu $sp, $sp, 4 # class syntaxtree.IdentifierExp at 14lib22		 
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 14lib22 
+lw $t0, ($sp) # class syntaxtree.ArrayLength at 14lib30 
+beq $t0, $zero, nullPtrException # class syntaxtree.ArrayLength at 14lib30  	
+lw $t0, -4($t0) # class syntaxtree.ArrayLength at 14lib30		
+sw $s5, ($sp) # class syntaxtree.ArrayLength at 14lib30   
+subu $sp, $sp, 4 # class syntaxtree.ArrayLength at 14lib30 
+sw $t0, ($sp) # class syntaxtree.ArrayLength at 14lib30	  
+lw $t0, ($sp) # class syntaxtree.LessThan at 14lib20 	
+lw $t1, 8($sp) # class syntaxtree.LessThan at 14lib20 	 
+slt $t0, $t1, $t0 # class syntaxtree.LessThan at 14lib20		
+addu $sp, $sp, 12 # class syntaxtree.LessThan at 14lib20  
+sw $t0, ($sp) # class syntaxtree.LessThan at 14lib20			
+lw $t0, ($sp) # class syntaxtree.While at 14lib2	 
+addu $sp, $sp, 4 # class syntaxtree.While at 14lib2 	
+bne $t0, $zero, while_top_31 # class syntaxtree.While at 14lib2 	
+while_exit_31: # class syntaxtree.While at 14lib2 	
+addu $sp, $sp, 8 # class syntaxtree.Block at 14lib2 
+subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 20lib15	 	
+sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 20lib15   
+li $t0, 0 # class syntaxtree.IntegerLiteral at 20lib15	
+sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 20lib15 
+lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 20lib11			
+j while_enter_78 # class syntaxtree.While at 20lib2	 
+while_top_78: # class syntaxtree.While at 20lib2   
+subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 21lib19	 	
+sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 21lib19	  
+li $t0, 0 # class syntaxtree.IntegerLiteral at 21lib19	 
+sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 21lib19	 	
+lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 21lib15 		
+j while_enter_74 # class syntaxtree.While at 21lib6 
+while_top_74: # class syntaxtree.While at 21lib6			
+while_enter_74: # class syntaxtree.While at 21lib6		 
+lw $t0, 0($sp) # class syntaxtree.IdentifierExp at 21lib22  	
+subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 21lib22   
+sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 21lib22 	
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 21lib22	 
+lw $t0, 24($sp) # class syntaxtree.IdentifierExp at 21lib26			
+subu $sp, $sp, 4 # class syntaxtree.IdentifierExp at 21lib26  
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 21lib26 	 
+lw $t0, 20($sp) # class syntaxtree.IdentifierExp at 21lib35 
+subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 21lib35	  
+sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 21lib35	 	
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 21lib35	 	
+lw $t0, 8($sp) # class syntaxtree.ArrayLookup at 21lib34 
+beq $t0, $zero, nullPtrException # class syntaxtree.ArrayLookup at 21lib34	 	
+lw $t1, -4($t0) # class syntaxtree.ArrayLookup at 21lib34 	
+lw $t2, ($sp) # class syntaxtree.ArrayLookup at 21lib34	 
+bgeu $t2, $t1, arrayIndexOutOfBounds # class syntaxtree.ArrayLookup at 21lib34 		
+sll $t2, $t2, 2 # class syntaxtree.ArrayLookup at 21lib34 	
+addu $t2, $t2, $t0 # class syntaxtree.ArrayLookup at 21lib34 
+lw $t0, ($t2) # class syntaxtree.ArrayLookup at 21lib34  
+sw $t0, 8($sp) # class syntaxtree.ArrayLookup at 21lib34 	
+addu $sp, $sp, 8 # class syntaxtree.ArrayLookup at 21lib34  	
+lw $t0, ($sp) # class syntaxtree.ArrayLength at 21lib37 
+beq $t0, $zero, nullPtrException # class syntaxtree.ArrayLength at 21lib37  
+lw $t0, -4($t0) # class syntaxtree.ArrayLength at 21lib37  	
+sw $s5, ($sp) # class syntaxtree.ArrayLength at 21lib37 
+subu $sp, $sp, 4 # class syntaxtree.ArrayLength at 21lib37 		
+sw $t0, ($sp) # class syntaxtree.ArrayLength at 21lib37	
+lw $t0, ($sp) # class syntaxtree.LessThan at 21lib24			
+lw $t1, 8($sp) # class syntaxtree.LessThan at 21lib24 	
+slt $t0, $t1, $t0 # class syntaxtree.LessThan at 21lib24 		
+addu $sp, $sp, 12 # class syntaxtree.LessThan at 21lib24	 	
+sw $t0, ($sp) # class syntaxtree.LessThan at 21lib24		
+lw $t0, ($sp) # class syntaxtree.While at 21lib6		 
+addu $sp, $sp, 4 # class syntaxtree.While at 21lib6	  
+bne $t0, $zero, while_top_74 # class syntaxtree.While at 21lib6		 
+while_exit_74: # class syntaxtree.While at 21lib6  	
+addu $sp, $sp, 8 # class syntaxtree.Block at 21lib6	 
+while_enter_78: # class syntaxtree.While at 20lib2		
+lw $t0, 0($sp) # class syntaxtree.IdentifierExp at 20lib18 		
+subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 20lib18	 	
+sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 20lib18	 	
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 20lib18   
+lw $t0, 16($sp) # class syntaxtree.IdentifierExp at 20lib22	 
+subu $sp, $sp, 4 # class syntaxtree.IdentifierExp at 20lib22   
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 20lib22	
+lw $t0, ($sp) # class syntaxtree.ArrayLength at 20lib30 	
+beq $t0, $zero, nullPtrException # class syntaxtree.ArrayLength at 20lib30 	
+lw $t0, -4($t0) # class syntaxtree.ArrayLength at 20lib30		
+sw $s5, ($sp) # class syntaxtree.ArrayLength at 20lib30  
+subu $sp, $sp, 4 # class syntaxtree.ArrayLength at 20lib30	  
+sw $t0, ($sp) # class syntaxtree.ArrayLength at 20lib30 		
+lw $t0, ($sp) # class syntaxtree.LessThan at 20lib20  	
+lw $t1, 8($sp) # class syntaxtree.LessThan at 20lib20  
+slt $t0, $t1, $t0 # class syntaxtree.LessThan at 20lib20	  
+addu $sp, $sp, 12 # class syntaxtree.LessThan at 20lib20	
+sw $t0, ($sp) # class syntaxtree.LessThan at 20lib20 
+lw $t0, ($sp) # class syntaxtree.While at 20lib2			
+addu $sp, $sp, 4 # class syntaxtree.While at 20lib2	 
+bne $t0, $zero, while_top_78 # class syntaxtree.While at 20lib2 	
+while_exit_78: # class syntaxtree.While at 20lib2		
+addu $sp, $sp, 8 # class syntaxtree.Block at 20lib2 	
+subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 27lib15	
+sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 27lib15 	 
+li $t0, 0 # class syntaxtree.IntegerLiteral at 27lib15	
+sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 27lib15		
+lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 27lib11   
+j while_enter_137 # class syntaxtree.While at 27lib2 	
+while_top_137: # class syntaxtree.While at 27lib2	
+subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 28lib19 	 
+sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 28lib19			
+li $t0, 0 # class syntaxtree.IntegerLiteral at 28lib19 
+sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 28lib19	 
+lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 28lib15		
+j while_enter_133 # class syntaxtree.While at 28lib6			
+while_top_133: # class syntaxtree.While at 28lib6 		
+lw $t0, 16($sp) # class syntaxtree.IdentifierExp at 29lib7		
+subu $sp, $sp, 4 # class syntaxtree.IdentifierExp at 29lib7	
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 29lib7	 	
+lw $t0, 12($sp) # class syntaxtree.IdentifierExp at 29lib16	 	
+subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 29lib16 
+sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 29lib16   
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 29lib16 	
+lw $t0, 8($sp) # class syntaxtree.ArrayLookup at 29lib15 		
+beq $t0, $zero, nullPtrException # class syntaxtree.ArrayLookup at 29lib15		
+lw $t1, -4($t0) # class syntaxtree.ArrayLookup at 29lib15  
+lw $t2, ($sp) # class syntaxtree.ArrayLookup at 29lib15		 
+bgeu $t2, $t1, arrayIndexOutOfBounds # class syntaxtree.ArrayLookup at 29lib15	  
+sll $t2, $t2, 2 # class syntaxtree.ArrayLookup at 29lib15	 	
+addu $t2, $t2, $t0 # class syntaxtree.ArrayLookup at 29lib15		
+lw $t0, ($t2) # class syntaxtree.ArrayLookup at 29lib15 	
+sw $t0, 8($sp) # class syntaxtree.ArrayLookup at 29lib15	 
+addu $sp, $sp, 8 # class syntaxtree.ArrayLookup at 29lib15 	
+lw $t0, 4($sp) # class syntaxtree.IdentifierExp at 29lib19   
+subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 29lib19	 	
+sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 29lib19 	 
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 29lib19	 	
+lw $t0, 8($sp) # class syntaxtree.ArrayLookup at 29lib18  
+beq $t0, $zero, nullPtrException # class syntaxtree.ArrayLookup at 29lib18 		
+lw $t1, -4($t0) # class syntaxtree.ArrayLookup at 29lib18	 
+lw $t2, ($sp) # class syntaxtree.ArrayLookup at 29lib18 
+bgeu $t2, $t1, arrayIndexOutOfBounds # class syntaxtree.ArrayLookup at 29lib18	 
+sll $t2, $t2, 2 # class syntaxtree.ArrayLookup at 29lib18 	 
+addu $t2, $t2, $t0 # class syntaxtree.ArrayLookup at 29lib18 	 
+lw $t0, ($t2) # class syntaxtree.ArrayLookup at 29lib18	 
+sw $t0, 8($sp) # class syntaxtree.ArrayLookup at 29lib18 		
+addu $sp, $sp, 8 # class syntaxtree.ArrayLookup at 29lib18 		
+subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 29lib24		 
+sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 29lib24 		
+li $t0, 2 # class syntaxtree.IntegerLiteral at 29lib24		
+sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 29lib24  	
+jal remainder # class syntaxtree.Remainder at 29lib22  	
+subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 29lib29 		
+sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 29lib29 	
+li $t0, 1 # class syntaxtree.IntegerLiteral at 29lib29		
+sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 29lib29 		
+lw $t0, ($sp) # class syntaxtree.Equals at 29lib26 	 
+lw $t1, 8($sp) # class syntaxtree.Equals at 29lib26	 
+seq $t0, $t0, $t1 # class syntaxtree.Equals at 29lib26  	
+addu $sp, $sp, 12 # class syntaxtree.Equals at 29lib26 	 
+sw $t0, ($sp) # class syntaxtree.Equals at 29lib26		 
+lw $t0, ($sp) # class syntaxtree.If at 29lib3	
+addu $sp, $sp, 4 # class syntaxtree.If at 29lib3		 
+beq $t0, $zero, if_else_130 # class syntaxtree.If at 29lib3	 
+j if_done_130 # class syntaxtree.If at 29lib3		 
+if_else_130: # class syntaxtree.If at 29lib3	
+if_done_130: # class syntaxtree.If at 29lib3 	 
+addu $sp, $sp, 12 # class syntaxtree.Block at 28lib51 		
+while_enter_133: # class syntaxtree.While at 28lib6 	 
+lw $t0, 0($sp) # class syntaxtree.IdentifierExp at 28lib22	 	
+subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 28lib22  
+sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 28lib22  	
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 28lib22 		
+lw $t0, 24($sp) # class syntaxtree.IdentifierExp at 28lib26 	 
+subu $sp, $sp, 4 # class syntaxtree.IdentifierExp at 28lib26   
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 28lib26  	
+lw $t0, 20($sp) # class syntaxtree.IdentifierExp at 28lib35  	
+subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 28lib35		 
+sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 28lib35 		
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 28lib35	
+lw $t0, 8($sp) # class syntaxtree.ArrayLookup at 28lib34		 
+beq $t0, $zero, nullPtrException # class syntaxtree.ArrayLookup at 28lib34		 
+lw $t1, -4($t0) # class syntaxtree.ArrayLookup at 28lib34 		
+lw $t2, ($sp) # class syntaxtree.ArrayLookup at 28lib34	
+bgeu $t2, $t1, arrayIndexOutOfBounds # class syntaxtree.ArrayLookup at 28lib34	
+sll $t2, $t2, 2 # class syntaxtree.ArrayLookup at 28lib34	 	
+addu $t2, $t2, $t0 # class syntaxtree.ArrayLookup at 28lib34	 	
+lw $t0, ($t2) # class syntaxtree.ArrayLookup at 28lib34  	
+sw $t0, 8($sp) # class syntaxtree.ArrayLookup at 28lib34 	 
+addu $sp, $sp, 8 # class syntaxtree.ArrayLookup at 28lib34  
+lw $t0, ($sp) # class syntaxtree.ArrayLength at 28lib37			
+beq $t0, $zero, nullPtrException # class syntaxtree.ArrayLength at 28lib37 	 
+lw $t0, -4($t0) # class syntaxtree.ArrayLength at 28lib37	 	
+sw $s5, ($sp) # class syntaxtree.ArrayLength at 28lib37			
+subu $sp, $sp, 4 # class syntaxtree.ArrayLength at 28lib37		
+sw $t0, ($sp) # class syntaxtree.ArrayLength at 28lib37 
+lw $t0, ($sp) # class syntaxtree.LessThan at 28lib24   
+lw $t1, 8($sp) # class syntaxtree.LessThan at 28lib24 	 
+slt $t0, $t1, $t0 # class syntaxtree.LessThan at 28lib24 	
+addu $sp, $sp, 12 # class syntaxtree.LessThan at 28lib24   
+sw $t0, ($sp) # class syntaxtree.LessThan at 28lib24 
+lw $t0, ($sp) # class syntaxtree.While at 28lib6	 	
+addu $sp, $sp, 4 # class syntaxtree.While at 28lib6 	
+bne $t0, $zero, while_top_133 # class syntaxtree.While at 28lib6	
+while_exit_133: # class syntaxtree.While at 28lib6	 
+addu $sp, $sp, 8 # class syntaxtree.Block at 28lib6  	
+while_enter_137: # class syntaxtree.While at 27lib2	
+lw $t0, 0($sp) # class syntaxtree.IdentifierExp at 27lib18 	
+subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 27lib18 
+sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 27lib18  	
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 27lib18  
+lw $t0, 16($sp) # class syntaxtree.IdentifierExp at 27lib22			
+subu $sp, $sp, 4 # class syntaxtree.IdentifierExp at 27lib22 
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 27lib22	
+lw $t0, ($sp) # class syntaxtree.ArrayLength at 27lib30  
+beq $t0, $zero, nullPtrException # class syntaxtree.ArrayLength at 27lib30  	
+lw $t0, -4($t0) # class syntaxtree.ArrayLength at 27lib30   
+sw $s5, ($sp) # class syntaxtree.ArrayLength at 27lib30	
+subu $sp, $sp, 4 # class syntaxtree.ArrayLength at 27lib30 	
+sw $t0, ($sp) # class syntaxtree.ArrayLength at 27lib30			
+lw $t0, ($sp) # class syntaxtree.LessThan at 27lib20 	 
+lw $t1, 8($sp) # class syntaxtree.LessThan at 27lib20   
+slt $t0, $t1, $t0 # class syntaxtree.LessThan at 27lib20	  
+addu $sp, $sp, 12 # class syntaxtree.LessThan at 27lib20	 
+sw $t0, ($sp) # class syntaxtree.LessThan at 27lib20	 	
+lw $t0, ($sp) # class syntaxtree.While at 27lib2	 	
+addu $sp, $sp, 4 # class syntaxtree.While at 27lib2  	
+bne $t0, $zero, while_top_137 # class syntaxtree.While at 27lib2		
+while_exit_137: # class syntaxtree.While at 27lib2  	
+addu $sp, $sp, 8 # class syntaxtree.Block at 27lib2	 	
+subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 36lib12 	 
+sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 36lib12  
+li $t0, 0 # class syntaxtree.IntegerLiteral at 36lib12 
+sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 36lib12  	
+lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 36lib6  	
+subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 37lib15 
+sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 37lib15 	 
+li $t0, 0 # class syntaxtree.IntegerLiteral at 37lib15	 
+sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 37lib15			
+lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 37lib11		 
+j while_enter_183 # class syntaxtree.While at 37lib2	 
+while_top_183: # class syntaxtree.While at 37lib2 
+subu $sp, $sp, 8 # class syntaxtree.IntegerLiteral at 38lib19 		
+sw $s5, 4($sp) # class syntaxtree.IntegerLiteral at 38lib19	 
+li $t0, 0 # class syntaxtree.IntegerLiteral at 38lib19   
+sw $t0, ($sp) # class syntaxtree.IntegerLiteral at 38lib19 	
+lw $zero, ($sp) # class syntaxtree.LocalVarDecl at 38lib15 		
+j while_enter_179 # class syntaxtree.While at 38lib6	
+while_top_179: # class syntaxtree.While at 38lib6	 	
+while_enter_179: # class syntaxtree.While at 38lib6 	 
+lw $t0, 0($sp) # class syntaxtree.IdentifierExp at 38lib22	  
+subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 38lib22  	
+sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 38lib22 	 
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 38lib22		 
+lw $t0, 32($sp) # class syntaxtree.IdentifierExp at 38lib26 		
+subu $sp, $sp, 4 # class syntaxtree.IdentifierExp at 38lib26		
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 38lib26  	
+lw $t0, 20($sp) # class syntaxtree.IdentifierExp at 38lib35 		
+subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 38lib35  
+sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 38lib35 
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 38lib35			
+lw $t0, 8($sp) # class syntaxtree.ArrayLookup at 38lib34 	 
+beq $t0, $zero, nullPtrException # class syntaxtree.ArrayLookup at 38lib34 	 
+lw $t1, -4($t0) # class syntaxtree.ArrayLookup at 38lib34 	
+lw $t2, ($sp) # class syntaxtree.ArrayLookup at 38lib34		
+bgeu $t2, $t1, arrayIndexOutOfBounds # class syntaxtree.ArrayLookup at 38lib34	
+sll $t2, $t2, 2 # class syntaxtree.ArrayLookup at 38lib34 	
+addu $t2, $t2, $t0 # class syntaxtree.ArrayLookup at 38lib34  
+lw $t0, ($t2) # class syntaxtree.ArrayLookup at 38lib34	 
+sw $t0, 8($sp) # class syntaxtree.ArrayLookup at 38lib34  	
+addu $sp, $sp, 8 # class syntaxtree.ArrayLookup at 38lib34 		
+lw $t0, ($sp) # class syntaxtree.ArrayLength at 38lib37			
+beq $t0, $zero, nullPtrException # class syntaxtree.ArrayLength at 38lib37 	
+lw $t0, -4($t0) # class syntaxtree.ArrayLength at 38lib37	  
+sw $s5, ($sp) # class syntaxtree.ArrayLength at 38lib37  	
+subu $sp, $sp, 4 # class syntaxtree.ArrayLength at 38lib37	 	
+sw $t0, ($sp) # class syntaxtree.ArrayLength at 38lib37 		
+lw $t0, ($sp) # class syntaxtree.LessThan at 38lib24			
+lw $t1, 8($sp) # class syntaxtree.LessThan at 38lib24		 
+slt $t0, $t1, $t0 # class syntaxtree.LessThan at 38lib24 		
+addu $sp, $sp, 12 # class syntaxtree.LessThan at 38lib24 
+sw $t0, ($sp) # class syntaxtree.LessThan at 38lib24			
+lw $t0, ($sp) # class syntaxtree.While at 38lib6 
+addu $sp, $sp, 4 # class syntaxtree.While at 38lib6		 
+bne $t0, $zero, while_top_179 # class syntaxtree.While at 38lib6			
+while_exit_179: # class syntaxtree.While at 38lib6 	 
+addu $sp, $sp, 8 # class syntaxtree.Block at 38lib6		 
+while_enter_183: # class syntaxtree.While at 37lib2   
+lw $t0, 0($sp) # class syntaxtree.IdentifierExp at 37lib18	 
+subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 37lib18   
+sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 37lib18 
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 37lib18	 	
+lw $t0, 24($sp) # class syntaxtree.IdentifierExp at 37lib22	 
+subu $sp, $sp, 4 # class syntaxtree.IdentifierExp at 37lib22   
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 37lib22 	
+lw $t0, ($sp) # class syntaxtree.ArrayLength at 37lib30 
+beq $t0, $zero, nullPtrException # class syntaxtree.ArrayLength at 37lib30 
+lw $t0, -4($t0) # class syntaxtree.ArrayLength at 37lib30  
+sw $s5, ($sp) # class syntaxtree.ArrayLength at 37lib30 		
+subu $sp, $sp, 4 # class syntaxtree.ArrayLength at 37lib30  	
+sw $t0, ($sp) # class syntaxtree.ArrayLength at 37lib30 	
+lw $t0, ($sp) # class syntaxtree.LessThan at 37lib20 		
+lw $t1, 8($sp) # class syntaxtree.LessThan at 37lib20	
+slt $t0, $t1, $t0 # class syntaxtree.LessThan at 37lib20  	
+addu $sp, $sp, 12 # class syntaxtree.LessThan at 37lib20 		
+sw $t0, ($sp) # class syntaxtree.LessThan at 37lib20	
+lw $t0, ($sp) # class syntaxtree.While at 37lib2  
+addu $sp, $sp, 4 # class syntaxtree.While at 37lib2 	 
+bne $t0, $zero, while_top_183 # class syntaxtree.While at 37lib2	
+while_exit_183: # class syntaxtree.While at 37lib2 
+addu $sp, $sp, 8 # class syntaxtree.Block at 37lib2   
+subu $sp, $sp, 4 # class syntaxtree.This at 42lib2   
+sw $s2, ($sp) # class syntaxtree.This at 42lib2  
+lw $t0, 4($sp) # class syntaxtree.IdentifierExp at 42lib11 	
+subu $sp, $sp, 8 # class syntaxtree.IdentifierExp at 42lib11	
+sw $s5, 4($sp) # class syntaxtree.IdentifierExp at 42lib11  
+sw $t0, ($sp) # class syntaxtree.IdentifierExp at 42lib11 	 
+lw $t0, 8($sp) # class syntaxtree.Call at 42lib2		 
+beq $t0, $zero, nullPtrException # class syntaxtree.Call at 42lib2	 
+lw $t0, -12($t0) # class syntaxtree.Call at 42lib2   
+lw $t0, 24($t0) # class syntaxtree.Call at 42lib2	
+jalr $t0 # class syntaxtree.Call at 42lib2	  
+subu $sp, $sp, 4 # class syntaxtree.This at 43lib2	
+sw $s2, ($sp) # class syntaxtree.This at 43lib2   
+subu $sp, $sp, 4 # class syntaxtree.StringLiteral at 43lib11			
+la $t0, strLit_189 # class syntaxtree.StringLiteral at 43lib11   
+sw $t0, ($sp) # class syntaxtree.StringLiteral at 43lib11		 
+lw $t0, 4($sp) # class syntaxtree.Call at 43lib2  	
+beq $t0, $zero, nullPtrException # class syntaxtree.Call at 43lib2  	
+lw $t0, -12($t0) # class syntaxtree.Call at 43lib2	
+lw $t0, 16($t0) # class syntaxtree.Call at 43lib2 		
+jalr $t0 # class syntaxtree.Call at 43lib2  	
+lw $ra, 16($sp) # class syntaxtree.MethodDeclVoid at 10lib17	 	
+lw $s2, 12($sp) # class syntaxtree.MethodDeclVoid at 10lib17	  
+addu $sp, $sp, 24 # class syntaxtree.MethodDeclVoid at 10lib17   
+jr $ra # class syntaxtree.MethodDeclVoid at 10lib17 	
 ###############################################################
 # MiniJava/UP library for MIPS/Spim -- version that assumes
 #    one-word boolean on stack

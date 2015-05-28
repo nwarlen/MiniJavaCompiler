@@ -70,10 +70,12 @@ public class CG1Visitor extends ASTvisitor {
     }
 
     public Object visitClassDecl(ClassDecl classDecl) {
-        this.currentMethodTable = new Vector<String>(this.superclassMethodTables.peek());
+        Vector<String> tmp = new Vector<String>();
+        tmp.addAll(this.superclassMethodTables.peek());
+        this.currentMethodTable = tmp;
 
         this.currentMethodOffset = 1 + numMethods(classDecl.superLink);
-
+        
         int numDataInstVarsInSuperClass;
         int numObjInstVarsInSuperClass;
 
@@ -90,7 +92,7 @@ public class CG1Visitor extends ASTvisitor {
         this.currentObjInstVarOffset = 4 * (numObjInstVarsInSuperClass);
 
         Object rtnObj = super.visitClassDecl(classDecl);
-
+        
         classDecl.numDataInstVars = (-16-this.currentDataInstVarOffset)/4;
         classDecl.numObjInstVars = this.currentObjInstVarOffset/4;
 
@@ -101,11 +103,16 @@ public class CG1Visitor extends ASTvisitor {
         else {
             this.code.emit(classDecl, ".word CLASS_" + superClass.name);
         }
-
+        
         for (String meth : this.currentMethodTable) {
+            ArrayList<String> used = new ArrayList<String>();
             if (meth != null) {
-                this.code.emit(classDecl, ".word " + meth);
+                if (!used.contains(meth)) {
+                    
+                    this.code.emit(classDecl, ".word " + meth);
+                }
             }
+            used.add(meth);
         }
 
         this.superclassMethodTables.push(this.currentMethodTable);
@@ -116,7 +123,7 @@ public class CG1Visitor extends ASTvisitor {
 
         this.code.emit(classDecl, "CLASS_END_" + classDecl.name + ":");
 
-        return rtnObj;
+        return null;
     }
     
     public Object visitMethodDecl(MethodDecl methodDecl) {
@@ -161,13 +168,18 @@ public class CG1Visitor extends ASTvisitor {
     }
     
     public Object visitFormalDecl(FormalDecl formalDecl) {
-        Object rtnObj = super.visitFormalDecl(formalDecl);
+        super.visitFormalDecl(formalDecl);
         
-        this.currentFormalVarOffset -= this.wordsOnStackFrame(formalDecl.type);
+        if (formalDecl.type instanceof IntegerType) {
+            this.currentFormalVarOffset -= 8;
+        }
+        else {
+            this.currentFormalVarOffset -= 4;
+        }
         
         formalDecl.offset = this.currentFormalVarOffset;
         
-        return rtnObj;
+        return null;
     }
     
     //HELPER METHODS
